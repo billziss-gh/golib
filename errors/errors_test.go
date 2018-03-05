@@ -41,11 +41,11 @@ func TestErrors(t *testing.T) {
 	}
 
 	E := `e2 (42)
-    	errors.TestErrors:github.com/billziss-gh/golib/errors/errors_test.go:18
+    	errors.TestErrors:github.com/billziss-gh/golib/errors/errors_test.go:24
 e1
-    	errors.TestErrors:github.com/billziss-gh/golib/errors/errors_test.go:17
+    	errors.TestErrors:github.com/billziss-gh/golib/errors/errors_test.go:23
 e0
-    	errors.TestErrors:github.com/billziss-gh/golib/errors/errors_test.go:16`
+    	errors.TestErrors:github.com/billziss-gh/golib/errors/errors_test.go:22`
 	if E != fmt.Sprintf("%+v", e2) {
 		t.Error()
 	}
@@ -61,9 +61,9 @@ e0
 	}
 
 	G := `g2 (42)
-    	errors.TestErrors:github.com/billziss-gh/golib/errors/errors_test.go:22
+    	errors.TestErrors:github.com/billziss-gh/golib/errors/errors_test.go:28
 g1
-    	errors.TestErrors:github.com/billziss-gh/golib/errors/errors_test.go:21
+    	errors.TestErrors:github.com/billziss-gh/golib/errors/errors_test.go:27
 g0`
 	if G != fmt.Sprintf("%+v", g2) {
 		t.Error()
@@ -183,11 +183,11 @@ func TestMessage(t *testing.T) {
 	}
 
 	E := `TestMessage: e2
-    	errors.TestMessage:github.com/billziss-gh/golib/errors/errors_test.go:173
+    	errors.TestMessage:github.com/billziss-gh/golib/errors/errors_test.go:179
 TestMessage
-    	errors.TestMessage:github.com/billziss-gh/golib/errors/errors_test.go:172
+    	errors.TestMessage:github.com/billziss-gh/golib/errors/errors_test.go:178
 TestMessage: e0
-    	errors.TestMessage:github.com/billziss-gh/golib/errors/errors_test.go:171`
+    	errors.TestMessage:github.com/billziss-gh/golib/errors/errors_test.go:177`
 	if E != fmt.Sprintf("%+v", e2) {
 		t.Error()
 	}
@@ -202,11 +202,11 @@ TestMessage: e0
 		}
 
 		E := `TestMessage: e2
-    	errors.TestMessage.func1:github.com/billziss-gh/golib/errors/errors_test.go:192
+    	errors.TestMessage.func1:github.com/billziss-gh/golib/errors/errors_test.go:198
 TestMessage
-    	errors.TestMessage.func1:github.com/billziss-gh/golib/errors/errors_test.go:191
+    	errors.TestMessage.func1:github.com/billziss-gh/golib/errors/errors_test.go:197
 TestMessage: e0
-    	errors.TestMessage.func1:github.com/billziss-gh/golib/errors/errors_test.go:190`
+    	errors.TestMessage.func1:github.com/billziss-gh/golib/errors/errors_test.go:196`
 		if E != fmt.Sprintf("%+v", e2) {
 			t.Error()
 		}
@@ -227,11 +227,11 @@ func (i myint) testMessage(t *testing.T) {
 	}
 
 	E := `testMessage: e2
-    	errors.myint.testMessage:github.com/billziss-gh/golib/errors/errors_test.go:217
+    	errors.myint.testMessage:github.com/billziss-gh/golib/errors/errors_test.go:223
 testMessage
-    	errors.myint.testMessage:github.com/billziss-gh/golib/errors/errors_test.go:216
+    	errors.myint.testMessage:github.com/billziss-gh/golib/errors/errors_test.go:222
 testMessage: e0
-    	errors.myint.testMessage:github.com/billziss-gh/golib/errors/errors_test.go:215`
+    	errors.myint.testMessage:github.com/billziss-gh/golib/errors/errors_test.go:221`
 	if E != fmt.Sprintf("%+v", e2) {
 		t.Error()
 	}
@@ -246,11 +246,11 @@ testMessage: e0
 		}
 
 		E := `testMessage: e2
-    	errors.myint.testMessage.func1:github.com/billziss-gh/golib/errors/errors_test.go:236
+    	errors.myint.testMessage.func1:github.com/billziss-gh/golib/errors/errors_test.go:242
 testMessage
-    	errors.myint.testMessage.func1:github.com/billziss-gh/golib/errors/errors_test.go:235
+    	errors.myint.testMessage.func1:github.com/billziss-gh/golib/errors/errors_test.go:241
 testMessage: e0
-    	errors.myint.testMessage.func1:github.com/billziss-gh/golib/errors/errors_test.go:234`
+    	errors.myint.testMessage.func1:github.com/billziss-gh/golib/errors/errors_test.go:240`
 		if E != fmt.Sprintf("%+v", e2) {
 			t.Error()
 		}
