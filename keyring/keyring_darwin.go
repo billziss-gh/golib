@@ -42,7 +42,7 @@ func (self *DarwinKeyring) Get(service, user string) (string, error) {
 	if nil == err {
 		return pass, nil
 	}
-	return "", errors.New(fmt.Sprintf("cannot get key %s/%s", service, user), ErrKeyring)
+	return "", errors.New(fmt.Sprintf("cannot get key %s/%s", service, user), nil, ErrKeyring)
 }
 
 func (self *DarwinKeyring) Set(service, user, pass string) error {

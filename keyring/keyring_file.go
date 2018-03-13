@@ -61,7 +61,7 @@ func (self *FileKeyring) Get(service, user string) (string, error) {
 		}
 	}
 
-	return "", errors.New(fmt.Sprintf("cannot get key %s/%s", service, user), ErrKeyring)
+	return "", errors.New(fmt.Sprintf("cannot get key %s/%s", service, user), nil, ErrKeyring)
 }
 
 func (self *FileKeyring) Set(service, user, pass string) error {

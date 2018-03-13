@@ -13,9 +13,8 @@
 // Package errors implements functions for advanced error handling.
 //
 // Errors in this package contain a message, a cause (an error that caused
-// this error) and an attachment (any interface{} other than error). Errors
-// also contain information about the program location where they were
-// created.
+// this error) and an attachment (any interface{}). Errors also contain
+// information about the program location where they were created.
 //
 // Errors can be printed using the fmt.Printf verbs %s, %q, %x, %X, %v. In
 // particular the %+v format will print an error complete with its stack trace.
@@ -153,19 +152,17 @@ func (err *errData) Format(f fmt.State, c rune) {
 }
 
 // New creates an error with a message. Additionally the error may contain
-// a cause (an error that caused this error) and an attachment  (any
-// interface{} other than error). New will also record information about the
-// program location where it was called.
+// a cause (an error that caused this error) and an attachment (any
+// interface{}). New will also record information about the program location
+// where it was called.
 func New(message string, args ...interface{}) error {
 	var cause error
 	var attachment interface{}
-	for _, arg := range args {
-		switch a := arg.(type) {
-		case error:
-			cause = a
-		default:
-			attachment = a
-		}
+	if 1 <= len(args) {
+		cause, _ = args[0].(error)
+	}
+	if 2 <= len(args) {
+		attachment = args[1]
 	}
 
 	var pc uintptr
