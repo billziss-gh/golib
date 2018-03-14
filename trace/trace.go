@@ -10,6 +10,17 @@
  * in the License.txt file at the root of this project.
  */
 
+// Package trace provides a simple tracing facility for Go functions.
+// Given the function below, program execution will be traced whenever
+// the function is entered or exited.
+//
+//     func fn(p1 ptype1, p2 ptype2, ...) (r1 rtyp1, r2 rtype2, ...) {
+//         defer trace.Trace(p1, p2)(&r1, &r2)
+//         // ...
+//     }
+//
+// The trace facility is normally disabled unless the environment variable
+// GOLIB_TRACE is set to a pattern matching one of the traced functions.
 package trace
 
 import (
