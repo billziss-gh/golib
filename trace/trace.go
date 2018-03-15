@@ -1,7 +1,7 @@
 /*
  * trace.go
  *
- * Copyright 2017 Bill Zissimopoulos
+ * Copyright 2017-2018 Bill Zissimopoulos
  */
 /*
  * This file is part of golib.
@@ -15,7 +15,7 @@
 // the function is entered or exited.
 //
 //     func fn(p1 ptype1, p2 ptype2, ...) (r1 rtyp1, r2 rtype2, ...) {
-//         defer trace.Trace(p1, p2)(&r1, &r2)
+//         defer trace.Trace(0, "TRACE", p1, p2)(&r1, &r2)
 //         // ...
 //     }
 //
@@ -29,6 +29,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"strings"
 )
 
 var (
@@ -123,4 +124,20 @@ func Trace(skip int, prfx string, vals ...interface{}) func(vals ...interface{})
 			panic(rcvr)
 		}
 	}
+}
+
+func Tracef(skip int, form string, vals ...interface{}) {
+	if "" == TracePattern {
+		return
+	}
+	pc, _, _, ok := runtime.Caller(skip + 1)
+	name := "<UNKNOWN>"
+	if ok {
+		fn := runtime.FuncForPC(pc)
+		name = fn.Name()
+		if m, _ := filepath.Match(TracePattern, name); !m {
+			return
+		}
+	}
+	log.Printf(strings.Replace(name, "%", "%%", -1)+": "+form, vals...)
 }
