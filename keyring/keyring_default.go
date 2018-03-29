@@ -11,7 +11,7 @@
  */
 
 // Package keyring implements functions for accessing and storing passwords
-// in the system's keyring (Keychain on Windows, Credential Manager on
+// in the system's keyring (Keychain on macOS, Credential Manager on
 // Windows, Secret Service on Linux).
 package keyring
 
