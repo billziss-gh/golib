@@ -22,6 +22,7 @@ import (
 	"github.com/billziss-gh/golib/util"
 )
 
+// FileKeyring is a keyring that stores passwords in a (plaintext) file.
 type FileKeyring struct {
 	Path string
 	mux  sync.Mutex

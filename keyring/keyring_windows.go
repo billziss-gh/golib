@@ -20,6 +20,7 @@ import (
 	"github.com/billziss-gh/golib/errors"
 )
 
+// SystemKeyring implements the system-specific keyring.
 type SystemKeyring struct {
 }
 
