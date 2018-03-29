@@ -19,10 +19,10 @@ import (
 	"github.com/billziss-gh/golib/errors"
 )
 
-type LinuxKeyring struct {
+type SystemKeyring struct {
 }
 
-func (self *LinuxKeyring) Get(service, user string) (string, error) {
+func (self *SystemKeyring) Get(service, user string) (string, error) {
 	out, err := exec.Command("secret-tool",
 		"lookup", "service", service, "username", user).Output()
 	if nil != err {
@@ -31,7 +31,7 @@ func (self *LinuxKeyring) Get(service, user string) (string, error) {
 	return string(out), nil
 }
 
-func (self *LinuxKeyring) Set(service, user, pass string) error {
+func (self *SystemKeyring) Set(service, user, pass string) error {
 	label := fmt.Sprintf("Password for '%s' on '%s'", user, service)
 	cmd := exec.Command("secret-tool",
 		"store", "service", service, "username", user, "--label", label)
@@ -50,7 +50,7 @@ func (self *LinuxKeyring) Set(service, user, pass string) error {
 	return nil
 }
 
-func (self *LinuxKeyring) Delete(service, user string) error {
+func (self *SystemKeyring) Delete(service, user string) error {
 	err := exec.Command("secret-tool",
 		"clear", "service", service, "username", user).Run()
 	if nil != err {
@@ -60,5 +60,5 @@ func (self *LinuxKeyring) Delete(service, user string) error {
 }
 
 func init() {
-	DefaultKeyring = &LinuxKeyring{}
+	DefaultKeyring = &SystemKeyring{}
 }

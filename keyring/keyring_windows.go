@@ -20,7 +20,7 @@ import (
 	"github.com/billziss-gh/golib/errors"
 )
 
-type WindowsKeyring struct {
+type SystemKeyring struct {
 }
 
 const (
@@ -55,7 +55,7 @@ func windowsKeyname(service, user string) string {
 	return user + "@" + service
 }
 
-func (self *WindowsKeyring) get(key string) (user string, pass string, err error) {
+func (self *SystemKeyring) get(key string) (user string, pass string, err error) {
 	targetName, err := syscall.UTF16PtrFromString(key)
 	if nil != err {
 		return
@@ -77,7 +77,7 @@ func (self *WindowsKeyring) get(key string) (user string, pass string, err error
 	return
 }
 
-func (self *WindowsKeyring) set(key, user, pass string) (err error) {
+func (self *SystemKeyring) set(key, user, pass string) (err error) {
 	var cred credential
 	cred.type_ = _CRED_TYPE_GENERIC
 	cred.persist = _CRED_PERSIST_LOCAL_MACHINE
@@ -105,7 +105,7 @@ func (self *WindowsKeyring) set(key, user, pass string) (err error) {
 	return
 }
 
-func (self *WindowsKeyring) delete(key string) (err error) {
+func (self *SystemKeyring) delete(key string) (err error) {
 	targetName, err := syscall.UTF16PtrFromString(key)
 	if nil != err {
 		return
@@ -123,7 +123,7 @@ func (self *WindowsKeyring) delete(key string) (err error) {
 
 // this implementation is mostly compatible with Python's keyring
 
-func (self *WindowsKeyring) Get(service, user string) (pass string, err error) {
+func (self *SystemKeyring) Get(service, user string) (pass string, err error) {
 	u, pass, err := self.get(service)
 	if nil != err || u != user {
 		_, pass, err = self.get(windowsKeyname(service, user))
@@ -134,7 +134,7 @@ func (self *WindowsKeyring) Get(service, user string) (pass string, err error) {
 	return
 }
 
-func (self *WindowsKeyring) Set(service, user, pass string) (err error) {
+func (self *SystemKeyring) Set(service, user, pass string) (err error) {
 	u, _, err := self.get(service)
 	if nil != err || u != user {
 		err = self.set(windowsKeyname(service, user), user, pass)
@@ -147,7 +147,7 @@ func (self *WindowsKeyring) Set(service, user, pass string) (err error) {
 	return
 }
 
-func (self *WindowsKeyring) Delete(service, user string) (err error) {
+func (self *SystemKeyring) Delete(service, user string) (err error) {
 	u, _, err := self.get(service)
 	if nil != err || u != user {
 		err = self.delete(windowsKeyname(service, user))
@@ -164,5 +164,5 @@ func (self *WindowsKeyring) Delete(service, user string) (err error) {
 }
 
 func init() {
-	DefaultKeyring = &WindowsKeyring{}
+	DefaultKeyring = &SystemKeyring{}
 }

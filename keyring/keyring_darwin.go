@@ -20,10 +20,10 @@ import (
 	"github.com/billziss-gh/golib/errors"
 )
 
-type DarwinKeyring struct {
+type SystemKeyring struct {
 }
 
-func (self *DarwinKeyring) Get(service, user string) (string, error) {
+func (self *SystemKeyring) Get(service, user string) (string, error) {
 	var buf bytes.Buffer
 	cmd := exec.Command("security",
 		"find-generic-password", "-s", service, "-a", user, "-g")
@@ -45,7 +45,7 @@ func (self *DarwinKeyring) Get(service, user string) (string, error) {
 	return "", errors.New(fmt.Sprintf("cannot get key %s/%s", service, user), nil, ErrKeyring)
 }
 
-func (self *DarwinKeyring) Set(service, user, pass string) error {
+func (self *SystemKeyring) Set(service, user, pass string) error {
 	err := exec.Command("security",
 		"add-generic-password", "-s", service, "-a", user, "-p", pass, "-U").Run()
 	if nil != err {
@@ -54,7 +54,7 @@ func (self *DarwinKeyring) Set(service, user, pass string) error {
 	return nil
 }
 
-func (self *DarwinKeyring) Delete(service, user string) error {
+func (self *SystemKeyring) Delete(service, user string) error {
 	err := exec.Command("security",
 		"delete-generic-password", "-s", service, "-a", user).Run()
 	if nil != err {
@@ -64,5 +64,5 @@ func (self *DarwinKeyring) Delete(service, user string) error {
 }
 
 func init() {
-	DefaultKeyring = &DarwinKeyring{}
+	DefaultKeyring = &SystemKeyring{}
 }
