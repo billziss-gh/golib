@@ -21,13 +21,15 @@
 //
 // The trace facility is normally disabled unless the environment variable
 // GOLIB_TRACE is set to a pattern matching one of the traced functions.
+// A pattern is a a comma-separated list of file-style patterns containing
+// wildcards such as * and ?.
 package trace
 
 import (
 	"fmt"
 	"log"
 	"os"
-	"path/filepath"
+	"path"
 	"runtime"
 	"strings"
 )
@@ -35,6 +37,38 @@ import (
 var (
 	TracePattern = os.Getenv("GOLIB_TRACE")
 )
+
+func traceName(skip int) string {
+	if "" == TracePattern {
+		return ""
+	}
+
+	name := ""
+	pc, _, _, ok := runtime.Caller(skip + 2)
+	if ok {
+		fn := runtime.FuncForPC(pc)
+		if nil != fn {
+			name = fn.Name()
+		}
+	}
+
+	if "" == name {
+		name = fmt.Sprintf("pc=%x", pc)
+	}
+
+	found := false
+	for _, p := range strings.Split(TracePattern, ",") {
+		if m, _ := path.Match(p, name); m {
+			found = true
+			break
+		}
+	}
+	if !found {
+		return ""
+	}
+
+	return name
+}
 
 func traceJoin(deref bool, vals []interface{}) string {
 	rslt := ""
@@ -89,23 +123,16 @@ func traceJoin(deref bool, vals []interface{}) string {
 }
 
 func Trace(skip int, prfx string, vals ...interface{}) func(vals ...interface{}) {
-	if "" == TracePattern {
+	name := traceName(skip)
+	if "" == name {
 		return func(vals ...interface{}) {
 		}
 	}
-	pc, _, _, ok := runtime.Caller(skip + 1)
-	name := "<UNKNOWN>"
-	if ok {
-		fn := runtime.FuncForPC(pc)
-		name = fn.Name()
-		if m, _ := filepath.Match(TracePattern, name); !m {
-			return func(vals ...interface{}) {
-			}
-		}
-	}
+
 	if "" != prfx {
 		prfx = prfx + ": "
 	}
+
 	args := traceJoin(false, vals)
 	return func(vals ...interface{}) {
 		form := "%v%v(%v) = %v"
@@ -127,17 +154,10 @@ func Trace(skip int, prfx string, vals ...interface{}) func(vals ...interface{})
 }
 
 func Tracef(skip int, form string, vals ...interface{}) {
-	if "" == TracePattern {
+	name := traceName(skip)
+	if "" == name {
 		return
 	}
-	pc, _, _, ok := runtime.Caller(skip + 1)
-	name := "<UNKNOWN>"
-	if ok {
-		fn := runtime.FuncForPC(pc)
-		name = fn.Name()
-		if m, _ := filepath.Match(TracePattern, name); !m {
-			return
-		}
-	}
+
 	log.Printf(strings.Replace(name, "%", "%%", -1)+": "+form, vals...)
 }
