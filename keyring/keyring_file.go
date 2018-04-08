@@ -13,6 +13,7 @@
 package keyring
 
 import (
+	"bytes"
 	"fmt"
 	"os"
 	"sync"
@@ -22,29 +23,47 @@ import (
 	"github.com/billziss-gh/golib/util"
 )
 
-// FileKeyring is a keyring that stores passwords in a (plaintext) file.
+// FileKeyring is a keyring that stores passwords in a file.
 type FileKeyring struct {
 	Path string
+	Key  []byte
 	mux  sync.Mutex
 }
 
-func (self *FileKeyring) getConf() (config.Config, error) {
-	conf, err := util.ReadFunc(self.Path, func(file *os.File) (interface{}, error) {
-		return config.Read(file)
-	})
+func (self *FileKeyring) getConf() (conf config.Config, err error) {
+	var data []byte
+	if nil == self.Key {
+		data, err = util.ReadData(self.Path)
+	} else {
+		data, err = util.ReadAeData(self.Path, self.Key)
+	}
+
 	if nil != err {
 		if e, ok := err.(*os.PathError); ok && "open" == e.Op {
-			return config.Config{}, nil
+			conf = config.Config{}
+			err = nil
 		}
-		return nil, err
+		return
 	}
-	return conf.(config.Config), nil
+
+	conf, err = config.Read(bytes.NewReader(data))
+	return
 }
 
-func (self *FileKeyring) setConf(conf config.Config) error {
-	return util.WriteFunc(self.Path, 0600, func(file *os.File) error {
-		return config.Write(file, conf)
-	})
+func (self *FileKeyring) setConf(conf config.Config) (err error) {
+	var buf bytes.Buffer
+	err = config.Write(&buf, conf)
+	if nil != err {
+		return
+	}
+
+	if nil == self.Key {
+		err = util.WriteData(self.Path, 0600, buf.Bytes())
+	} else {
+		err = util.WriteAeData(self.Path, 0600, buf.Bytes(), self.Key)
+	}
+
+	return
 }
 
 func (self *FileKeyring) Get(service, user string) (string, error) {

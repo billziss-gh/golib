@@ -160,3 +160,10 @@ func TestFileKeyring(t *testing.T) {
 	defer os.Remove(path)
 	testKeyringInstance(t, &FileKeyring{Path: path})
 }
+
+func TestSecureFileKeyring(t *testing.T) {
+	path := filepath.Join(os.TempDir(), "keyring_test")
+	os.Remove(path)
+	defer os.Remove(path)
+	testKeyringInstance(t, &FileKeyring{Path: path, Key: []byte("passpasspasspass")})
+}
