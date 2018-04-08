@@ -21,8 +21,8 @@ import (
 	"os"
 )
 
-func ReadAeData(path string, key []byte) (data interface{}, err error) {
-	return ReadFunc(path, func(file *os.File) (interface{}, error) {
+func ReadAeData(path string, key []byte) (data []byte, err error) {
+	idata, err := ReadFunc(path, func(file *os.File) (interface{}, error) {
 		c, err := aes.NewCipher(key)
 		if nil != err {
 			return nil, err
@@ -45,6 +45,12 @@ func ReadAeData(path string, key []byte) (data interface{}, err error) {
 
 		return ae.Open(data[:0], nonce, data, nil)
 	})
+
+	if nil == err {
+		data = idata.([]byte)
+	}
+
+	return
 }
 
 func WriteAeData(path string, perm os.FileMode, data []byte, key []byte) (err error) {
@@ -76,6 +82,7 @@ func WriteAeData(path string, perm os.FileMode, data []byte, key []byte) (err er
 		if nil == err && n < len(data) {
 			err = io.ErrShortWrite
 		}
+
 		return err
 	})
 }

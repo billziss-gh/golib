@@ -36,7 +36,7 @@ func TestReadWriteAeData(t *testing.T) {
 		t.Error(err)
 	}
 
-	if s != string(b.([]byte)) {
+	if s != string(b) {
 		t.Error()
 	}
 }

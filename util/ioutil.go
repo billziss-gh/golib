@@ -33,10 +33,16 @@ func ReadFunc(path string, fn func(*os.File) (interface{}, error)) (data interfa
 	return
 }
 
-func ReadData(path string) (data interface{}, err error) {
-	return ReadFunc(path, func(file *os.File) (interface{}, error) {
+func ReadData(path string) (data []byte, err error) {
+	idata, err := ReadFunc(path, func(file *os.File) (interface{}, error) {
 		return ioutil.ReadAll(file)
 	})
+
+	if nil == err {
+		data = idata.([]byte)
+	}
+
+	return
 }
 
 func WriteFunc(path string, perm os.FileMode, fn func(*os.File) error) (err error) {
