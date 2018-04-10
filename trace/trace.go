@@ -110,6 +110,8 @@ func traceJoin(deref bool, vals []interface{}) string {
 				rslt += fmt.Sprintf(", %#v", *i)
 			case *string:
 				rslt += fmt.Sprintf(", %#v", *i)
+			case *error:
+				rslt += fmt.Sprintf(", %#v", *i)
 			default:
 				rslt += fmt.Sprintf(", %#v", v)
 			}
