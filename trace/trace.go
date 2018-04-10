@@ -35,11 +35,12 @@ import (
 )
 
 var (
-	TracePattern = os.Getenv("GOLIB_TRACE")
+	Verbose = false
+	Pattern = os.Getenv("GOLIB_TRACE")
 )
 
 func traceName(skip int) string {
-	if "" == TracePattern {
+	if !Verbose || "" == Pattern {
 		return ""
 	}
 
@@ -57,7 +58,7 @@ func traceName(skip int) string {
 	}
 
 	found := false
-	for _, p := range strings.Split(TracePattern, ",") {
+	for _, p := range strings.Split(Pattern, ",") {
 		if m, _ := path.Match(p, name); m {
 			found = true
 			break
