@@ -17,7 +17,7 @@
 //     func Do(client *http.Client, req *http.Request) (rsp *http.Response, err error) {
 //         retry.Retry(
 //             retry.Count(5),
-//             retry.Backoff(time.Second, time.Second*15),
+//             retry.Backoff(time.Second, time.Second*30),
 //             func(i int) bool {
 //                 if 0 < i {
 //                     req.Body, err = req.GetBody()
@@ -29,8 +29,11 @@
 //                 if nil != err {
 //                     return false
 //                 }
-//                 defer rsp.Body.Close()
-//                 return 500 <= rsp.StatusCode && nil != req.GetBody
+//                 if 500 <= rsp.StatusCode && nil != req.GetBody {
+//                     rsp.Body.Close()
+//                     return true
+//                 }
+//                 return false
 //             })
 //
 //         return
