@@ -11,6 +11,7 @@
  */
 
 // Package cmd provides (sub-)command functionality for command-line programs.
+// This package works closely with the standard library flag package.
 package cmd
 
 import (
@@ -141,6 +142,7 @@ func PrintCmds() {
 	DefaultCmdMap.PrintCmds()
 }
 
+// Run parses the command line and executes the named command.
 func Run() {
 	if !flag.Parsed() {
 		flag.Parse()
