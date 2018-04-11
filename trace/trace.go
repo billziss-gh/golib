@@ -19,10 +19,10 @@
 //         // ...
 //     }
 //
-// The trace facility is normally disabled unless the environment variable
-// GOLIB_TRACE is set to a pattern matching one of the traced functions.
-// A pattern is a a comma-separated list of file-style patterns containing
-// wildcards such as * and ?.
+// The trace facility is disabled unless the variable Verbose is true and
+// the environment variable GOLIB_TRACE is set to a pattern matching one
+// of the traced functions. A pattern is a a comma-separated list of
+// file-style patterns containing wildcards such as * and ?.
 package trace
 
 import (
