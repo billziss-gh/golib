@@ -24,14 +24,14 @@ import (
 //
 // See https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
 
-type LinuxAppData struct {
+type SystemAppData struct {
 	configDir string
 	dataDir   string
 	cacheDir  string
 	err       error
 }
 
-func (self *LinuxAppData) ConfigDir() (string, error) {
+func (self *SystemAppData) ConfigDir() (string, error) {
 	if nil != self.err {
 		return "", errors.New("", self.err, ErrAppData)
 	}
@@ -39,7 +39,7 @@ func (self *LinuxAppData) ConfigDir() (string, error) {
 	return self.configDir, nil
 }
 
-func (self *LinuxAppData) DataDir() (string, error) {
+func (self *SystemAppData) DataDir() (string, error) {
 	if nil != self.err {
 		return "", errors.New("", self.err, ErrAppData)
 	}
@@ -47,7 +47,7 @@ func (self *LinuxAppData) DataDir() (string, error) {
 	return self.dataDir, nil
 }
 
-func (self *LinuxAppData) CacheDir() (string, error) {
+func (self *SystemAppData) CacheDir() (string, error) {
 	if nil != self.err {
 		return "", errors.New("", self.err, ErrAppData)
 	}
@@ -82,5 +82,5 @@ func init() {
 		}
 	}
 
-	DefaultAppData = &LinuxAppData{configDir, dataDir, cacheDir, e}
+	DefaultAppData = &SystemAppData{configDir, dataDir, cacheDir, e}
 }

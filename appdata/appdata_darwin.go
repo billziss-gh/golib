@@ -24,14 +24,14 @@ import (
 // We should probably be using API's like NSSearchPathForDirectoriesInDomains or FSFindFolder,
 // but cannot without cgo.
 
-type DarwinAppData struct {
+type SystemAppData struct {
 	configDir string
 	dataDir   string
 	cacheDir  string
 	err       error
 }
 
-func (self *DarwinAppData) ConfigDir() (string, error) {
+func (self *SystemAppData) ConfigDir() (string, error) {
 	if nil != self.err {
 		return "", errors.New("", self.err, ErrAppData)
 	}
@@ -39,7 +39,7 @@ func (self *DarwinAppData) ConfigDir() (string, error) {
 	return self.configDir, nil
 }
 
-func (self *DarwinAppData) DataDir() (string, error) {
+func (self *SystemAppData) DataDir() (string, error) {
 	if nil != self.err {
 		return "", errors.New("", self.err, ErrAppData)
 	}
@@ -47,7 +47,7 @@ func (self *DarwinAppData) DataDir() (string, error) {
 	return self.dataDir, nil
 }
 
-func (self *DarwinAppData) CacheDir() (string, error) {
+func (self *SystemAppData) CacheDir() (string, error) {
 	if nil != self.err {
 		return "", errors.New("", self.err, ErrAppData)
 	}
@@ -70,5 +70,5 @@ func init() {
 		cacheDir = filepath.Join(h, "Library/Caches")
 	}
 
-	DefaultAppData = &DarwinAppData{configDir, dataDir, cacheDir, e}
+	DefaultAppData = &SystemAppData{configDir, dataDir, cacheDir, e}
 }

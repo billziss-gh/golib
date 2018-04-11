@@ -24,14 +24,14 @@ import (
 //
 // A perhaps better solution would be to use SHGetKnownFolderPath.
 
-type WindowsAppData struct {
+type SystemAppData struct {
 	configDir string
 	dataDir   string
 	cacheDir  string
 	err       error
 }
 
-func (self *WindowsAppData) ConfigDir() (string, error) {
+func (self *SystemAppData) ConfigDir() (string, error) {
 	if nil != self.err {
 		return "", errors.New("", self.err, ErrAppData)
 	}
@@ -39,7 +39,7 @@ func (self *WindowsAppData) ConfigDir() (string, error) {
 	return self.configDir, nil
 }
 
-func (self *WindowsAppData) DataDir() (string, error) {
+func (self *SystemAppData) DataDir() (string, error) {
 	if nil != self.err {
 		return "", errors.New("", self.err, ErrAppData)
 	}
@@ -47,7 +47,7 @@ func (self *WindowsAppData) DataDir() (string, error) {
 	return self.dataDir, nil
 }
 
-func (self *WindowsAppData) CacheDir() (string, error) {
+func (self *SystemAppData) CacheDir() (string, error) {
 	if nil != self.err {
 		return "", errors.New("", self.err, ErrAppData)
 	}
@@ -82,5 +82,5 @@ func init() {
 		}
 	}
 
-	DefaultAppData = &WindowsAppData{configDir, dataDir, cacheDir, e}
+	DefaultAppData = &SystemAppData{configDir, dataDir, cacheDir, e}
 }
