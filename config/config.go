@@ -10,6 +10,23 @@
  * in the License.txt file at the root of this project.
  */
 
+// Package config is used to read and write configuration files.
+//
+// Configuration files are similar to Windows INI files. They store a list
+// of properties (key/value pairs); they may also be grouped into sections.
+//
+// The basic syntax of a configuration file is as follows:
+//
+//     name1=value1
+//     name2=value2
+//     ...
+//
+//     [section]
+//     name3=value3
+//     name4=value4
+//     ...
+//
+// Properties not in a section are placed in the unnamed (empty "") section.
 package config
 
 import (
@@ -25,20 +42,45 @@ import (
 )
 
 type (
-	Section      map[string]string
-	Config       map[string]Section
+	// Section is used to store a configuration section as string properties.
+	Section map[string]string
+
+	// Config is used to store a configuration as string properties.
+	Config map[string]Section
+
+	// TypedSection is used to store a configuration section as typed properties.
 	TypedSection map[string]interface{}
-	TypedConfig  map[string]TypedSection
+
+	// TypedConfig is used to store a configuration as typed properties.
+	TypedConfig map[string]TypedSection
 )
 
+// Dialect is used to represent different dialects of configuration files.
 type Dialect struct {
-	AssignChars    string
-	CommentChars   string
-	ReadEmptyKeys  bool
+	// AssignChars contains the characters used for property assignment.
+	// The first character in AssignChars is the character used during
+	// writing.
+	AssignChars string
+
+	// CommentChars contains the characters used for comments.
+	CommentChars string
+
+	// ReadEmptyKeys determines whether to read properties with missing values.
+	// The properties so created will be interpretted as empty strings for Read
+	// and boolean true for ReadTyped.
+	ReadEmptyKeys bool
+
+	// WriteEmptyKeys determines whether to write properties with missing values.
+	// This is only important when writing boolean true properties with
+	// WriteTyped; these will be written with missing values.
 	WriteEmptyKeys bool
-	Strict         bool
+
+	// Strict determines whether parse errors should be reported.
+	Strict bool
 }
 
+// DefaultDialect contains the default configuration dialect.
+// It is compatible with Windows INI files.
 var DefaultDialect = &Dialect{
 	AssignChars:    "=:",
 	CommentChars:   ";#",
@@ -123,6 +165,7 @@ func (dialect *Dialect) ReadFunc(
 	return nil
 }
 
+// Read reads a configuration from the supplied reader.
 func (dialect *Dialect) Read(reader io.Reader) (Config, error) {
 	conf := Config{}
 
@@ -146,6 +189,7 @@ func (dialect *Dialect) Read(reader io.Reader) (Config, error) {
 	return conf, nil
 }
 
+// ReadTyped reads a typed configuration from the supplied reader.
 func (dialect *Dialect) ReadTyped(reader io.Reader) (TypedConfig, error) {
 	conf := TypedConfig{}
 
@@ -191,6 +235,7 @@ func (dialect *Dialect) ReadTyped(reader io.Reader) (TypedConfig, error) {
 	return conf, nil
 }
 
+// Write writes a configuration to the supplied writer.
 func (dialect *Dialect) Write(writer io.Writer, conf Config) error {
 	bufw := bufio.NewWriter(writer)
 
@@ -231,6 +276,7 @@ func (dialect *Dialect) Write(writer io.Writer, conf Config) error {
 	return bufw.Flush()
 }
 
+// WriteTyped writes a typed configuration to the supplied writer.
 func (dialect *Dialect) WriteTyped(writer io.Writer, conf TypedConfig) error {
 	bufw := bufio.NewWriter(writer)
 
@@ -380,18 +426,26 @@ func ReadFunc(
 	return DefaultDialect.ReadFunc(reader, fn)
 }
 
+// Read reads a configuration from the supplied reader
+// using the default dialect.
 func Read(reader io.Reader) (Config, error) {
 	return DefaultDialect.Read(reader)
 }
 
+// ReadTyped reads a typed configuration from the supplied reader
+// using the default dialect.
 func ReadTyped(reader io.Reader) (TypedConfig, error) {
 	return DefaultDialect.ReadTyped(reader)
 }
 
+// Write writes a configuration to the supplied writer
+// using the default dialect.
 func Write(writer io.Writer, conf Config) error {
 	return DefaultDialect.Write(writer, conf)
 }
 
+// WriteTyped writes a typed configuration to the supplied writer
+// using the default dialect.
 func WriteTyped(writer io.Writer, conf TypedConfig) error {
 	return DefaultDialect.WriteTyped(writer, conf)
 }
