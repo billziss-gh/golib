@@ -15,17 +15,23 @@
 // For example to retry an HTTP request:
 //
 //     func Do(client *http.Client, req *http.Request) (rsp *http.Response, err error) {
-//         retry.Retry(Limit(5), retry.Backoff(time.Second, time.Second*15), func(i int) bool {
-//             if 0 < i {
-//                 req.Body, err = req.GetBody()
+//         retry.Retry(
+//             retry.Limit(5),
+//             retry.Backoff(time.Second, time.Second*15),
+//             func(i int) bool {
+//                 if 0 < i {
+//                     req.Body, err = req.GetBody()
+//                     if nil != err {
+//                         return false
+//                     }
+//                 }
+//                 rsp, err = client.Do(req)
 //                 if nil != err {
 //                     return false
 //                 }
-//             }
-//
-//             rsp, err = client.Do(req)
-//             return nil == err && 500 <= rsp.StatusCode && nil != req.GetBody
-//         })
+//                 defer rsp.Body.Close()
+//                 return 500 <= rsp.StatusCode && nil != req.GetBody
+//             })
 //
 //         return
 //     }
