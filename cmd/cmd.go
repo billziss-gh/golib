@@ -142,7 +142,7 @@ func PrintCmds() {
 	DefaultCmdMap.PrintCmds()
 }
 
-// Run parses the command line and executes the named command.
+// Run parses the command line and executes the specified (sub-)command.
 func Run() {
 	if !flag.Parsed() {
 		flag.Parse()
