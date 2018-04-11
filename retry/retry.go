@@ -16,7 +16,7 @@
 //
 //     func Do(client *http.Client, req *http.Request) (rsp *http.Response, err error) {
 //         retry.Retry(
-//             retry.Limit(5),
+//             retry.Count(5),
 //             retry.Backoff(time.Second, time.Second*15),
 //             func(i int) bool {
 //                 if 0 < i {
