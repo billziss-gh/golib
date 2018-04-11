@@ -10,7 +10,7 @@
  * in the License.txt file at the root of this project.
  */
 
-// Package cmd provides subcommand functionality for command-line programs.
+// Package cmd provides (sub-)command functionality for command-line programs.
 package cmd
 
 import (
