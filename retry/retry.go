@@ -53,10 +53,10 @@ func Retry(actions ...func(int) bool) {
 	}
 }
 
-// Limit limits the number of retries performed by Retry.
-func Limit(retries int) func(int) bool {
+// Count limits the number of retries performed by Retry.
+func Count(retries int) func(int) bool {
 	return func(i int) bool {
-		return retries >= i
+		return retries > i
 	}
 }
 
@@ -64,11 +64,11 @@ func Limit(retries int) func(int) bool {
 func Backoff(sleep, maxsleep time.Duration) func(int) bool {
 	return func(i int) bool {
 		if 0 < i {
-			time.Sleep(sleep)
-			sleep = time.Duration((1.5 + rand.Float64()) * float64(sleep))
-			if sleep < maxsleep {
+			if sleep > maxsleep {
 				sleep = maxsleep
 			}
+			time.Sleep(sleep)
+			sleep = time.Duration((1.5 + rand.Float64()) * float64(sleep))
 		}
 		return true
 	}
