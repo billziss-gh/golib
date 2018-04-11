@@ -13,6 +13,8 @@
 // Package appdata provides access to well known directories for applications.
 package appdata
 
+import "github.com/billziss-gh/golib/errors"
+
 const ErrAppData = "ErrAppData"
 
 type AppData interface {
@@ -39,4 +41,35 @@ func DataDir() (string, error) {
 // should be stored.
 func CacheDir() (string, error) {
 	return DefaultAppData.CacheDir()
+}
+
+type systemAppData struct {
+	configDir string
+	dataDir   string
+	cacheDir  string
+	err       error
+}
+
+func (self *systemAppData) ConfigDir() (string, error) {
+	if nil != self.err {
+		return "", errors.New("", self.err, ErrAppData)
+	}
+
+	return self.configDir, nil
+}
+
+func (self *systemAppData) DataDir() (string, error) {
+	if nil != self.err {
+		return "", errors.New("", self.err, ErrAppData)
+	}
+
+	return self.dataDir, nil
+}
+
+func (self *systemAppData) CacheDir() (string, error) {
+	if nil != self.err {
+		return "", errors.New("", self.err, ErrAppData)
+	}
+
+	return self.cacheDir, nil
 }

@@ -15,45 +15,12 @@ package appdata
 import (
 	"os/user"
 	"path/filepath"
-
-	"github.com/billziss-gh/golib/errors"
 )
 
 // Darwin: use well-known locations.
 //
 // We should probably be using API's like NSSearchPathForDirectoriesInDomains or FSFindFolder,
 // but cannot without cgo.
-
-type SystemAppData struct {
-	configDir string
-	dataDir   string
-	cacheDir  string
-	err       error
-}
-
-func (self *SystemAppData) ConfigDir() (string, error) {
-	if nil != self.err {
-		return "", errors.New("", self.err, ErrAppData)
-	}
-
-	return self.configDir, nil
-}
-
-func (self *SystemAppData) DataDir() (string, error) {
-	if nil != self.err {
-		return "", errors.New("", self.err, ErrAppData)
-	}
-
-	return self.dataDir, nil
-}
-
-func (self *SystemAppData) CacheDir() (string, error) {
-	if nil != self.err {
-		return "", errors.New("", self.err, ErrAppData)
-	}
-
-	return self.cacheDir, nil
-}
 
 func init() {
 	configDir := ""
@@ -70,5 +37,5 @@ func init() {
 		cacheDir = filepath.Join(h, "Library/Caches")
 	}
 
-	DefaultAppData = &SystemAppData{configDir, dataDir, cacheDir, e}
+	DefaultAppData = &systemAppData{configDir, dataDir, cacheDir, e}
 }

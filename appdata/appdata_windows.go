@@ -16,44 +16,11 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
-
-	"github.com/billziss-gh/golib/errors"
 )
 
 // Windows: use environment variables and well-known locations.
 //
 // A perhaps better solution would be to use SHGetKnownFolderPath.
-
-type SystemAppData struct {
-	configDir string
-	dataDir   string
-	cacheDir  string
-	err       error
-}
-
-func (self *SystemAppData) ConfigDir() (string, error) {
-	if nil != self.err {
-		return "", errors.New("", self.err, ErrAppData)
-	}
-
-	return self.configDir, nil
-}
-
-func (self *SystemAppData) DataDir() (string, error) {
-	if nil != self.err {
-		return "", errors.New("", self.err, ErrAppData)
-	}
-
-	return self.dataDir, nil
-}
-
-func (self *SystemAppData) CacheDir() (string, error) {
-	if nil != self.err {
-		return "", errors.New("", self.err, ErrAppData)
-	}
-
-	return self.cacheDir, nil
-}
 
 func init() {
 	configDir := ""
@@ -82,5 +49,5 @@ func init() {
 		}
 	}
 
-	DefaultAppData = &SystemAppData{configDir, dataDir, cacheDir, e}
+	DefaultAppData = &systemAppData{configDir, dataDir, cacheDir, e}
 }
