@@ -8,7 +8,7 @@
 - [keyring](#github.com/billziss-gh/golib/keyring) - Package keyring implements functions for accessing and storing passwords in the system's keyring (Keychain on macOS, Credential Manager on Windows, Secret Service on Linux).
 - [retry](#github.com/billziss-gh/golib/retry) - Package retry implements simple retry functionality.
 - [trace](#github.com/billziss-gh/golib/trace) - Package trace provides a simple tracing facility for Go functions.
-- [util](#github.com/billziss-gh/golib/util) - 
+- [util](#github.com/billziss-gh/golib/util) - Package util contains general utility functions.
 
 
 
@@ -997,6 +997,8 @@ _[[godoc.org](https://godoc.org/github.com/billziss-gh/golib/util)]_
 * [Index](#github.com/billziss-gh/golib/util/pkg-index)
 
 ### <a name="github.com/billziss-gh/golib/util/pkg-overview">Overview</a>
+Package util contains general utility functions.
+
 
 
 
@@ -1010,7 +1012,7 @@ _[[godoc.org](https://godoc.org/github.com/billziss-gh/golib/util)]_
 
 
 ##### <a name="github.com/billziss-gh/golib/util/pkg-files">Package files</a>
-[ioae.go](util/ioae.go) [ioutil.go](util/ioutil.go) 
+[doc.go](util/doc.go) [ioae.go](util/ioae.go) [ioutil.go](util/ioutil.go) 
 
 
 
