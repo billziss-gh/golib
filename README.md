@@ -1,14 +1,14 @@
 # golib - Library of Go packages
 
 [//]: # (GODOC)
-- [appdata](#github.com/billziss-gh/golib/appdata) [:link:](https://godoc.org/github.com/billziss-gh/golib/appdata)
-- [cmd](#github.com/billziss-gh/golib/cmd) [:link:](https://godoc.org/github.com/billziss-gh/golib/cmd)
-- [config](#github.com/billziss-gh/golib/config) [:link:](https://godoc.org/github.com/billziss-gh/golib/config)
-- [errors](#github.com/billziss-gh/golib/errors) [:link:](https://godoc.org/github.com/billziss-gh/golib/errors)
-- [keyring](#github.com/billziss-gh/golib/keyring) [:link:](https://godoc.org/github.com/billziss-gh/golib/keyring)
-- [retry](#github.com/billziss-gh/golib/retry) [:link:](https://godoc.org/github.com/billziss-gh/golib/retry)
-- [trace](#github.com/billziss-gh/golib/trace) [:link:](https://godoc.org/github.com/billziss-gh/golib/trace)
-- [util](#github.com/billziss-gh/golib/util) [:link:](https://godoc.org/github.com/billziss-gh/golib/util)
+- [appdata](#github.com/billziss-gh/golib/appdata) [:book:](https://godoc.org/github.com/billziss-gh/golib/appdata)
+- [cmd](#github.com/billziss-gh/golib/cmd) [:book:](https://godoc.org/github.com/billziss-gh/golib/cmd)
+- [config](#github.com/billziss-gh/golib/config) [:book:](https://godoc.org/github.com/billziss-gh/golib/config)
+- [errors](#github.com/billziss-gh/golib/errors) [:book:](https://godoc.org/github.com/billziss-gh/golib/errors)
+- [keyring](#github.com/billziss-gh/golib/keyring) [:book:](https://godoc.org/github.com/billziss-gh/golib/keyring)
+- [retry](#github.com/billziss-gh/golib/retry) [:book:](https://godoc.org/github.com/billziss-gh/golib/retry)
+- [trace](#github.com/billziss-gh/golib/trace) [:book:](https://godoc.org/github.com/billziss-gh/golib/trace)
+- [util](#github.com/billziss-gh/golib/util) [:book:](https://godoc.org/github.com/billziss-gh/golib/util)
 
 
 
