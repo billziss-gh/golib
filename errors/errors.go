@@ -165,11 +165,7 @@ func New(message string, args ...interface{}) error {
 		attachment = args[1]
 	}
 
-	var pc uintptr
-	var a [1]uintptr
-	if 1 <= runtime.Callers(2, a[:]) {
-		pc = a[0]
-	}
+	pc, _, _, _ := runtime.Caller(1)
 
 	return &errData{message, cause, attachment, pc}
 }
