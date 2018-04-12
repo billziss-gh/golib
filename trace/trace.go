@@ -68,6 +68,9 @@ func traceName(skip int) string {
 		return ""
 	}
 
+	if i := strings.LastIndex(name, "/"); -1 != i {
+		return name[i+1:]
+	}
 	return name
 }
 
