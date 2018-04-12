@@ -1,14 +1,14 @@
 # golib - Library of Go packages
 
 [//]: # (GODOC)
-- [package appdata](#github.com/billziss-gh/golib/appdata) [:book:](https://godoc.org/github.com/billziss-gh/golib/appdata)
-- [package cmd](#github.com/billziss-gh/golib/cmd) [:book:](https://godoc.org/github.com/billziss-gh/golib/cmd)
-- [package config](#github.com/billziss-gh/golib/config) [:book:](https://godoc.org/github.com/billziss-gh/golib/config)
-- [package errors](#github.com/billziss-gh/golib/errors) [:book:](https://godoc.org/github.com/billziss-gh/golib/errors)
-- [package keyring](#github.com/billziss-gh/golib/keyring) [:book:](https://godoc.org/github.com/billziss-gh/golib/keyring)
-- [package retry](#github.com/billziss-gh/golib/retry) [:book:](https://godoc.org/github.com/billziss-gh/golib/retry)
-- [package trace](#github.com/billziss-gh/golib/trace) [:book:](https://godoc.org/github.com/billziss-gh/golib/trace)
-- [package util](#github.com/billziss-gh/golib/util) [:book:](https://godoc.org/github.com/billziss-gh/golib/util)
+- [appdata](#github.com/billziss-gh/golib/appdata) - Package appdata provides access to well known directories for applications. [:book:](https://godoc.org/github.com/billziss-gh/golib/appdata)
+- [cmd](#github.com/billziss-gh/golib/cmd) - Package cmd provides (sub-)command functionality for command-line programs. [:book:](https://godoc.org/github.com/billziss-gh/golib/cmd)
+- [config](#github.com/billziss-gh/golib/config) - Package config is used to read and write configuration files. [:book:](https://godoc.org/github.com/billziss-gh/golib/config)
+- [errors](#github.com/billziss-gh/golib/errors) - Package errors implements functions for advanced error handling. [:book:](https://godoc.org/github.com/billziss-gh/golib/errors)
+- [keyring](#github.com/billziss-gh/golib/keyring) - Package keyring implements functions for accessing and storing passwords in the system's keyring (Keychain on macOS, Credential Manager on Windows, Secret Service on Linux). [:book:](https://godoc.org/github.com/billziss-gh/golib/keyring)
+- [retry](#github.com/billziss-gh/golib/retry) - Package retry implements simple retry functionality. [:book:](https://godoc.org/github.com/billziss-gh/golib/retry)
+- [trace](#github.com/billziss-gh/golib/trace) - Package trace provides a simple tracing facility for Go functions. [:book:](https://godoc.org/github.com/billziss-gh/golib/trace)
+- [util](#github.com/billziss-gh/golib/util) -  [:book:](https://godoc.org/github.com/billziss-gh/golib/util)
 
 
 
