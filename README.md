@@ -34,7 +34,7 @@ Package appdata provides access to well known directories for applications.
 
 
 ##### <a name="github.com/billziss-gh/golib/appdata/pkg-files">Package files</a>
-[appdata.go](/src/github.com/billziss-gh/golib/appdata/appdata.go) [appdata_darwin.go](/src/github.com/billziss-gh/golib/appdata/appdata_darwin.go) 
+[appdata.go](appdata/appdata.go) [appdata_darwin.go](appdata/appdata_darwin.go) 
 
 
 ### <a name="github.com/billziss-gh/golib/appdata/pkg-constants">Constants</a>
@@ -44,7 +44,7 @@ const ErrAppData = "ErrAppData"
 
 
 
-### <a name="github.com/billziss-gh/golib/appdata/CacheDir">func</a> [CacheDir](/src/target/appdata.go?s=954:985#L42)
+### <a name="github.com/billziss-gh/golib/appdata/CacheDir">func</a> [CacheDir](appdata/appdata.go#L42)
 ``` go
 func CacheDir() (string, error)
 ```
@@ -53,7 +53,7 @@ should be stored.
 
 
 
-### <a name="github.com/billziss-gh/golib/appdata/ConfigDir">func</a> [ConfigDir](/src/target/appdata.go?s=644:676#L30)
+### <a name="github.com/billziss-gh/golib/appdata/ConfigDir">func</a> [ConfigDir](appdata/appdata.go#L30)
 ``` go
 func ConfigDir() (string, error)
 ```
@@ -62,7 +62,7 @@ should be stored.
 
 
 
-### <a name="github.com/billziss-gh/golib/appdata/DataDir">func</a> [DataDir](/src/target/appdata.go?s=800:830#L36)
+### <a name="github.com/billziss-gh/golib/appdata/DataDir">func</a> [DataDir](appdata/appdata.go#L36)
 ``` go
 func DataDir() (string, error)
 ```
@@ -72,7 +72,7 @@ should be stored.
 
 
 
-### <a name="github.com/billziss-gh/golib/appdata/AppData">type</a> [AppData](/src/target/appdata.go?s=410:520#L20)
+### <a name="github.com/billziss-gh/golib/appdata/AppData">type</a> [AppData](appdata/appdata.go#L20)
 ``` go
 type AppData interface {
     ConfigDir() (string, error)
@@ -130,7 +130,7 @@ This package works closely with the standard library flag package.
 
 
 ##### <a name="github.com/billziss-gh/golib/cmd/pkg-files">Package files</a>
-[cmd.go](/src/github.com/billziss-gh/golib/cmd/cmd.go) 
+[cmd.go](cmd/cmd.go) 
 
 
 
@@ -142,7 +142,7 @@ DefaultCmdMap is the default command map.
 
 
 
-### <a name="github.com/billziss-gh/golib/cmd/PrintCmds">func</a> [PrintCmds](/src/target/cmd.go?s=3388:3404#L141)
+### <a name="github.com/billziss-gh/golib/cmd/PrintCmds">func</a> [PrintCmds](cmd/cmd.go#L141)
 ``` go
 func PrintCmds()
 ```
@@ -151,7 +151,7 @@ to stderr.
 
 
 
-### <a name="github.com/billziss-gh/golib/cmd/Run">func</a> [Run](/src/target/cmd.go?s=3510:3520#L146)
+### <a name="github.com/billziss-gh/golib/cmd/Run">func</a> [Run](cmd/cmd.go#L146)
 ``` go
 func Run()
 ```
@@ -160,7 +160,7 @@ Run parses the command line and executes the specified (sub-)command.
 
 
 
-### <a name="github.com/billziss-gh/golib/cmd/Cmd">type</a> [Cmd](/src/target/cmd.go?s=610:901#L33)
+### <a name="github.com/billziss-gh/golib/cmd/Cmd">type</a> [Cmd](cmd/cmd.go#L33)
 ``` go
 type Cmd struct {
     // Flag contains the command flag set.
@@ -184,7 +184,7 @@ Cmd encapsulates a (sub-)command.
 
 
 
-#### <a name="github.com/billziss-gh/golib/cmd/Add">func</a> [Add](/src/target/cmd.go?s=3203:3256#L135)
+#### <a name="github.com/billziss-gh/golib/cmd/Add">func</a> [Add](cmd/cmd.go#L135)
 ``` go
 func Add(name string, main func(*Cmd, []string)) *Cmd
 ```
@@ -204,7 +204,7 @@ Then the command name becomes "NAME", the command Use field becomes
 
 
 
-#### <a name="github.com/billziss-gh/golib/cmd/Cmd.GetFlag">func</a> (\*Cmd) [GetFlag](/src/target/cmd.go?s=2554:2603#L113)
+#### <a name="github.com/billziss-gh/golib/cmd/Cmd.GetFlag">func</a> (\*Cmd) [GetFlag](cmd/cmd.go#L113)
 ``` go
 func (self *Cmd) GetFlag(name string) interface{}
 ```
@@ -213,7 +213,7 @@ GetFlag gets the value of the named flag.
 
 
 
-### <a name="github.com/billziss-gh/golib/cmd/CmdMap">type</a> [CmdMap](/src/target/cmd.go?s=489:571#L26)
+### <a name="github.com/billziss-gh/golib/cmd/CmdMap">type</a> [CmdMap](cmd/cmd.go#L26)
 ``` go
 type CmdMap struct {
     // contains filtered or unexported fields
@@ -227,7 +227,7 @@ CmdMap encapsulates a (sub-)command map.
 
 
 
-#### <a name="github.com/billziss-gh/golib/cmd/NewCmdMap">func</a> [NewCmdMap](/src/target/cmd.go?s=2430:2454#L106)
+#### <a name="github.com/billziss-gh/golib/cmd/NewCmdMap">func</a> [NewCmdMap](cmd/cmd.go#L106)
 ``` go
 func NewCmdMap() *CmdMap
 ```
@@ -237,7 +237,7 @@ NewCmdMap creates a new command map.
 
 
 
-#### <a name="github.com/billziss-gh/golib/cmd/CmdMap.Add">func</a> (\*CmdMap) [Add](/src/target/cmd.go?s=1288:1362#L57)
+#### <a name="github.com/billziss-gh/golib/cmd/CmdMap.Add">func</a> (\*CmdMap) [Add](cmd/cmd.go#L57)
 ``` go
 func (self *CmdMap) Add(name string, main func(*Cmd, []string)) (cmd *Cmd)
 ```
@@ -256,7 +256,7 @@ Then the command name becomes "NAME", the command Use field becomes
 
 
 
-#### <a name="github.com/billziss-gh/golib/cmd/CmdMap.Get">func</a> (\*CmdMap) [Get](/src/target/cmd.go?s=1761:1802#L76)
+#### <a name="github.com/billziss-gh/golib/cmd/CmdMap.Get">func</a> (\*CmdMap) [Get](cmd/cmd.go#L76)
 ``` go
 func (self *CmdMap) Get(name string) *Cmd
 ```
@@ -265,7 +265,7 @@ Get gets a command by name.
 
 
 
-#### <a name="github.com/billziss-gh/golib/cmd/CmdMap.GetNames">func</a> (\*CmdMap) [GetNames](/src/target/cmd.go?s=1912:1951#L83)
+#### <a name="github.com/billziss-gh/golib/cmd/CmdMap.GetNames">func</a> (\*CmdMap) [GetNames](cmd/cmd.go#L83)
 ``` go
 func (self *CmdMap) GetNames() []string
 ```
@@ -274,7 +274,7 @@ GetNames gets all command names.
 
 
 
-#### <a name="github.com/billziss-gh/golib/cmd/CmdMap.PrintCmds">func</a> (\*CmdMap) [PrintCmds](/src/target/cmd.go?s=2143:2174#L92)
+#### <a name="github.com/billziss-gh/golib/cmd/CmdMap.PrintCmds">func</a> (\*CmdMap) [PrintCmds](cmd/cmd.go#L92)
 ``` go
 func (self *CmdMap) PrintCmds()
 ```
@@ -340,7 +340,7 @@ Properties not in a section are placed in the unnamed (empty "") section.
 
 
 ##### <a name="github.com/billziss-gh/golib/config/pkg-files">Package files</a>
-[config.go](/src/github.com/billziss-gh/golib/config/config.go) 
+[config.go](config/config.go) 
 
 
 
@@ -359,14 +359,14 @@ It is compatible with Windows INI files.
 
 
 
-### <a name="github.com/billziss-gh/golib/config/ReadFunc">func</a> [ReadFunc](/src/target/config.go?s=8984:9069#L424)
+### <a name="github.com/billziss-gh/golib/config/ReadFunc">func</a> [ReadFunc](config/config.go#L424)
 ``` go
 func ReadFunc(
     reader io.Reader, fn func(sect, name string, valu interface{})) error
 ```
 
 
-### <a name="github.com/billziss-gh/golib/config/Write">func</a> [Write](/src/target/config.go?s=9570:9617#L443)
+### <a name="github.com/billziss-gh/golib/config/Write">func</a> [Write](config/config.go#L443)
 ``` go
 func Write(writer io.Writer, conf Config) error
 ```
@@ -375,7 +375,7 @@ using the default dialect.
 
 
 
-### <a name="github.com/billziss-gh/golib/config/WriteTyped">func</a> [WriteTyped](/src/target/config.go?s=9762:9819#L449)
+### <a name="github.com/billziss-gh/golib/config/WriteTyped">func</a> [WriteTyped](config/config.go#L449)
 ``` go
 func WriteTyped(writer io.Writer, conf TypedConfig) error
 ```
@@ -385,7 +385,7 @@ using the default dialect.
 
 
 
-### <a name="github.com/billziss-gh/golib/config/Config">type</a> [Config](/src/target/config.go?s=1005:1030#L49)
+### <a name="github.com/billziss-gh/golib/config/Config">type</a> [Config](config/config.go#L49)
 ``` go
 type Config map[string]Section
 ```
@@ -397,7 +397,7 @@ Config is used to store a configuration as string properties.
 
 
 
-#### <a name="github.com/billziss-gh/golib/config/Read">func</a> [Read](/src/target/config.go?s=9204:9247#L431)
+#### <a name="github.com/billziss-gh/golib/config/Read">func</a> [Read](config/config.go#L431)
 ``` go
 func Read(reader io.Reader) (Config, error)
 ```
@@ -408,7 +408,7 @@ using the default dialect.
 
 
 
-### <a name="github.com/billziss-gh/golib/config/Dialect">type</a> [Dialect](/src/target/config.go?s=1334:2127#L59)
+### <a name="github.com/billziss-gh/golib/config/Dialect">type</a> [Dialect](config/config.go#L59)
 ``` go
 type Dialect struct {
     // AssignChars contains the characters used for property assignment.
@@ -444,7 +444,7 @@ Dialect is used to represent different dialects of configuration files.
 
 
 
-#### <a name="github.com/billziss-gh/golib/config/Dialect.Read">func</a> (\*Dialect) [Read](/src/target/config.go?s=3926:3988#L169)
+#### <a name="github.com/billziss-gh/golib/config/Dialect.Read">func</a> (\*Dialect) [Read](config/config.go#L169)
 ``` go
 func (dialect *Dialect) Read(reader io.Reader) (Config, error)
 ```
@@ -453,7 +453,7 @@ Read reads a configuration from the supplied reader.
 
 
 
-#### <a name="github.com/billziss-gh/golib/config/Dialect.ReadFunc">func</a> (\*Dialect) [ReadFunc](/src/target/config.go?s=2386:2490#L92)
+#### <a name="github.com/billziss-gh/golib/config/Dialect.ReadFunc">func</a> (\*Dialect) [ReadFunc](config/config.go#L92)
 ``` go
 func (dialect *Dialect) ReadFunc(
     reader io.Reader, fn func(sect, name string, valu interface{})) error
@@ -461,7 +461,7 @@ func (dialect *Dialect) ReadFunc(
 
 
 
-#### <a name="github.com/billziss-gh/golib/config/Dialect.ReadTyped">func</a> (\*Dialect) [ReadTyped](/src/target/config.go?s=4426:4498#L193)
+#### <a name="github.com/billziss-gh/golib/config/Dialect.ReadTyped">func</a> (\*Dialect) [ReadTyped](config/config.go#L193)
 ``` go
 func (dialect *Dialect) ReadTyped(reader io.Reader) (TypedConfig, error)
 ```
@@ -470,7 +470,7 @@ ReadTyped reads a typed configuration from the supplied reader.
 
 
 
-#### <a name="github.com/billziss-gh/golib/config/Dialect.Write">func</a> (\*Dialect) [Write](/src/target/config.go?s=5283:5349#L239)
+#### <a name="github.com/billziss-gh/golib/config/Dialect.Write">func</a> (\*Dialect) [Write](config/config.go#L239)
 ``` go
 func (dialect *Dialect) Write(writer io.Writer, conf Config) error
 ```
@@ -479,7 +479,7 @@ Write writes a configuration to the supplied writer.
 
 
 
-#### <a name="github.com/billziss-gh/golib/config/Dialect.WriteTyped">func</a> (\*Dialect) [WriteTyped](/src/target/config.go?s=6183:6259#L280)
+#### <a name="github.com/billziss-gh/golib/config/Dialect.WriteTyped">func</a> (\*Dialect) [WriteTyped](config/config.go#L280)
 ``` go
 func (dialect *Dialect) WriteTyped(writer io.Writer, conf TypedConfig) error
 ```
@@ -488,7 +488,7 @@ WriteTyped writes a typed configuration to the supplied writer.
 
 
 
-### <a name="github.com/billziss-gh/golib/config/Section">type</a> [Section](/src/target/config.go?s=911:936#L46)
+### <a name="github.com/billziss-gh/golib/config/Section">type</a> [Section](config/config.go#L46)
 ``` go
 type Section map[string]string
 ```
@@ -503,7 +503,7 @@ Section is used to store a configuration section as string properties.
 
 
 
-### <a name="github.com/billziss-gh/golib/config/TypedConfig">type</a> [TypedConfig](/src/target/config.go?s=1220:1255#L55)
+### <a name="github.com/billziss-gh/golib/config/TypedConfig">type</a> [TypedConfig](config/config.go#L55)
 ``` go
 type TypedConfig map[string]TypedSection
 ```
@@ -515,7 +515,7 @@ TypedConfig is used to store a configuration as typed properties.
 
 
 
-#### <a name="github.com/billziss-gh/golib/config/ReadTyped">func</a> [ReadTyped](/src/target/config.go?s=9385:9438#L437)
+#### <a name="github.com/billziss-gh/golib/config/ReadTyped">func</a> [ReadTyped](config/config.go#L437)
 ``` go
 func ReadTyped(reader io.Reader) (TypedConfig, error)
 ```
@@ -526,7 +526,7 @@ using the default dialect.
 
 
 
-### <a name="github.com/billziss-gh/golib/config/TypedSection">type</a> [TypedSection](/src/target/config.go?s=1112:1147#L52)
+### <a name="github.com/billziss-gh/golib/config/TypedSection">type</a> [TypedSection](config/config.go#L52)
 ``` go
 type TypedSection map[string]interface{}
 ```
@@ -579,13 +579,13 @@ Inspired by <a href="https://github.com/pkg/errors">https://github.com/pkg/error
 
 
 ##### <a name="github.com/billziss-gh/golib/errors/pkg-files">Package files</a>
-[errors.go](/src/github.com/billziss-gh/golib/errors/errors.go) 
+[errors.go](errors/errors.go) 
 
 
 
 
 
-### <a name="github.com/billziss-gh/golib/errors/Attachment">func</a> [Attachment](/src/target/errors.go?s=4444:4482#L189)
+### <a name="github.com/billziss-gh/golib/errors/Attachment">func</a> [Attachment](errors/errors.go#L189)
 ``` go
 func Attachment(err error) interface{}
 ```
@@ -594,7 +594,7 @@ Attachment will return additional information attached to this error
 
 
 
-### <a name="github.com/billziss-gh/golib/errors/Cause">func</a> [Cause](/src/target/errors.go?s=4241:4268#L178)
+### <a name="github.com/billziss-gh/golib/errors/Cause">func</a> [Cause](errors/errors.go#L178)
 ``` go
 func Cause(err error) error
 ```
@@ -602,7 +602,7 @@ Cause will return the error that caused this error (if any).
 
 
 
-### <a name="github.com/billziss-gh/golib/errors/HasAttachment">func</a> [HasAttachment](/src/target/errors.go?s=4902:4960#L211)
+### <a name="github.com/billziss-gh/golib/errors/HasAttachment">func</a> [HasAttachment](errors/errors.go#L211)
 ``` go
 func HasAttachment(err error, attachment interface{}) bool
 ```
@@ -611,7 +611,7 @@ of this error.
 
 
 
-### <a name="github.com/billziss-gh/golib/errors/HasCause">func</a> [HasCause](/src/target/errors.go?s=4664:4706#L200)
+### <a name="github.com/billziss-gh/golib/errors/HasCause">func</a> [HasCause](errors/errors.go#L200)
 ``` go
 func HasCause(err error, cause error) bool
 ```
@@ -620,7 +620,7 @@ of this error.
 
 
 
-### <a name="github.com/billziss-gh/golib/errors/New">func</a> [New](/src/target/errors.go?s=3839:3890#L158)
+### <a name="github.com/billziss-gh/golib/errors/New">func</a> [New](errors/errors.go#L158)
 ``` go
 func New(message string, args ...interface{}) error
 ```
@@ -671,7 +671,7 @@ Windows, Secret Service on Linux).
 
 
 ##### <a name="github.com/billziss-gh/golib/keyring/pkg-files">Package files</a>
-[keyring_darwin.go](/src/github.com/billziss-gh/golib/keyring/keyring_darwin.go) [keyring_default.go](/src/github.com/billziss-gh/golib/keyring/keyring_default.go) [keyring_file.go](/src/github.com/billziss-gh/golib/keyring/keyring_file.go) 
+[keyring_darwin.go](keyring/keyring_darwin.go) [keyring_default.go](keyring/keyring_default.go) [keyring_file.go](keyring/keyring_file.go) 
 
 
 ### <a name="github.com/billziss-gh/golib/keyring/pkg-constants">Constants</a>
@@ -681,7 +681,7 @@ const ErrKeyring = "ErrKeyring"
 
 
 
-### <a name="github.com/billziss-gh/golib/keyring/Delete">func</a> [Delete](/src/target/keyring_default.go?s=1324:1363#L47)
+### <a name="github.com/billziss-gh/golib/keyring/Delete">func</a> [Delete](keyring/keyring_default.go#L47)
 ``` go
 func Delete(service, user string) error
 ```
@@ -689,7 +689,7 @@ Delete deletes the password for a service and user in the default keyring.
 
 
 
-### <a name="github.com/billziss-gh/golib/keyring/Get">func</a> [Get](/src/target/keyring_default.go?s=984:1030#L37)
+### <a name="github.com/billziss-gh/golib/keyring/Get">func</a> [Get](keyring/keyring_default.go#L37)
 ``` go
 func Get(service, user string) (string, error)
 ```
@@ -697,7 +697,7 @@ Get gets the password for a service and user in the default keyring.
 
 
 
-### <a name="github.com/billziss-gh/golib/keyring/Set">func</a> [Set](/src/target/keyring_default.go?s=1150:1192#L42)
+### <a name="github.com/billziss-gh/golib/keyring/Set">func</a> [Set](keyring/keyring_default.go#L42)
 ``` go
 func Set(service, user, pass string) error
 ```
@@ -706,7 +706,7 @@ Set sets the password for a service and user in the default keyring.
 
 
 
-### <a name="github.com/billziss-gh/golib/keyring/FileKeyring">type</a> [FileKeyring](/src/target/keyring_file.go?s=476:546#L27)
+### <a name="github.com/billziss-gh/golib/keyring/FileKeyring">type</a> [FileKeyring](keyring/keyring_file.go#L27)
 ``` go
 type FileKeyring struct {
     Path string
@@ -725,28 +725,28 @@ FileKeyring is a keyring that stores passwords in a file.
 
 
 
-#### <a name="github.com/billziss-gh/golib/keyring/FileKeyring.Delete">func</a> (\*FileKeyring) [Delete](/src/target/keyring_file.go?s=2251:2310#L112)
+#### <a name="github.com/billziss-gh/golib/keyring/FileKeyring.Delete">func</a> (\*FileKeyring) [Delete](keyring/keyring_file.go#L112)
 ``` go
 func (self *FileKeyring) Delete(service, user string) error
 ```
 
 
 
-#### <a name="github.com/billziss-gh/golib/keyring/FileKeyring.Get">func</a> (\*FileKeyring) [Get](/src/target/keyring_file.go?s=1266:1332#L69)
+#### <a name="github.com/billziss-gh/golib/keyring/FileKeyring.Get">func</a> (\*FileKeyring) [Get](keyring/keyring_file.go#L69)
 ``` go
 func (self *FileKeyring) Get(service, user string) (string, error)
 ```
 
 
 
-#### <a name="github.com/billziss-gh/golib/keyring/FileKeyring.Set">func</a> (\*FileKeyring) [Set](/src/target/keyring_file.go?s=1714:1776#L87)
+#### <a name="github.com/billziss-gh/golib/keyring/FileKeyring.Set">func</a> (\*FileKeyring) [Set](keyring/keyring_file.go#L87)
 ``` go
 func (self *FileKeyring) Set(service, user, pass string) error
 ```
 
 
 
-### <a name="github.com/billziss-gh/golib/keyring/Keyring">type</a> [Keyring](/src/target/keyring_default.go?s=556:858#L22)
+### <a name="github.com/billziss-gh/golib/keyring/Keyring">type</a> [Keyring](keyring/keyring_default.go#L22)
 ``` go
 type Keyring interface {
     // Get gets the password for a service and user.
@@ -777,7 +777,7 @@ The default keyring.
 
 
 
-### <a name="github.com/billziss-gh/golib/keyring/SystemKeyring">type</a> [SystemKeyring](/src/target/keyring_darwin.go?s=395:424#L24)
+### <a name="github.com/billziss-gh/golib/keyring/SystemKeyring">type</a> [SystemKeyring](keyring/keyring_darwin.go#L24)
 ``` go
 type SystemKeyring struct {
 }
@@ -793,21 +793,21 @@ SystemKeyring implements the system-specific keyring.
 
 
 
-#### <a name="github.com/billziss-gh/golib/keyring/SystemKeyring.Delete">func</a> (\*SystemKeyring) [Delete](/src/target/keyring_darwin.go?s=1374:1435#L58)
+#### <a name="github.com/billziss-gh/golib/keyring/SystemKeyring.Delete">func</a> (\*SystemKeyring) [Delete](keyring/keyring_darwin.go#L58)
 ``` go
 func (self *SystemKeyring) Delete(service, user string) error
 ```
 
 
 
-#### <a name="github.com/billziss-gh/golib/keyring/SystemKeyring.Get">func</a> (\*SystemKeyring) [Get](/src/target/keyring_darwin.go?s=426:494#L27)
+#### <a name="github.com/billziss-gh/golib/keyring/SystemKeyring.Get">func</a> (\*SystemKeyring) [Get](keyring/keyring_darwin.go#L27)
 ``` go
 func (self *SystemKeyring) Get(service, user string) (string, error)
 ```
 
 
 
-#### <a name="github.com/billziss-gh/golib/keyring/SystemKeyring.Set">func</a> (\*SystemKeyring) [Set](/src/target/keyring_darwin.go?s=1073:1137#L49)
+#### <a name="github.com/billziss-gh/golib/keyring/SystemKeyring.Set">func</a> (\*SystemKeyring) [Set](keyring/keyring_darwin.go#L49)
 ``` go
 func (self *SystemKeyring) Set(service, user, pass string) error
 ```
@@ -869,13 +869,13 @@ For example to retry an HTTP request:
 
 
 ##### <a name="github.com/billziss-gh/golib/retry/pkg-files">Package files</a>
-[retry.go](/src/github.com/billziss-gh/golib/retry/retry.go) 
+[retry.go](retry/retry.go) 
 
 
 
 
 
-### <a name="github.com/billziss-gh/golib/retry/Backoff">func</a> [Backoff](/src/target/retry.go?s=1639:1697#L67)
+### <a name="github.com/billziss-gh/golib/retry/Backoff">func</a> [Backoff](retry/retry.go#L67)
 ``` go
 func Backoff(sleep, maxsleep time.Duration) func(int) bool
 ```
@@ -883,7 +883,7 @@ Backoff implements an exponential backoff with jitter.
 
 
 
-### <a name="github.com/billziss-gh/golib/retry/Count">func</a> [Count](/src/target/retry.go?s=1486:1524#L60)
+### <a name="github.com/billziss-gh/golib/retry/Count">func</a> [Count](retry/retry.go#L60)
 ``` go
 func Count(retries int) func(int) bool
 ```
@@ -891,7 +891,7 @@ Count limits the number of retries performed by Retry.
 
 
 
-### <a name="github.com/billziss-gh/golib/retry/Retry">func</a> [Retry](/src/target/retry.go?s=1287:1324#L49)
+### <a name="github.com/billziss-gh/golib/retry/Retry">func</a> [Retry](retry/retry.go#L49)
 ``` go
 func Retry(actions ...func(int) bool)
 ```
@@ -940,7 +940,7 @@ file-style patterns containing wildcards such as * and ?.
 
 
 ##### <a name="github.com/billziss-gh/golib/trace/pkg-files">Package files</a>
-[trace.go](/src/github.com/billziss-gh/golib/trace/trace.go) 
+[trace.go](trace/trace.go) 
 
 
 
@@ -953,13 +953,13 @@ var (
 ```
 
 
-### <a name="github.com/billziss-gh/golib/trace/Trace">func</a> [Trace](/src/target/trace.go?s=2715:2795#L128)
+### <a name="github.com/billziss-gh/golib/trace/Trace">func</a> [Trace](trace/trace.go#L128)
 ``` go
 func Trace(skip int, prfx string, vals ...interface{}) func(vals ...interface{})
 ```
 
 
-### <a name="github.com/billziss-gh/golib/trace/Tracef">func</a> [Tracef](/src/target/trace.go?s=3305:3360#L159)
+### <a name="github.com/billziss-gh/golib/trace/Tracef">func</a> [Tracef](trace/trace.go#L159)
 ``` go
 func Tracef(skip int, form string, vals ...interface{})
 ```
@@ -994,43 +994,43 @@ func Tracef(skip int, form string, vals ...interface{})
 
 
 ##### <a name="github.com/billziss-gh/golib/util/pkg-files">Package files</a>
-[ioae.go](/src/github.com/billziss-gh/golib/util/ioae.go) [ioutil.go](/src/github.com/billziss-gh/golib/util/ioutil.go) 
+[ioae.go](util/ioae.go) [ioutil.go](util/ioutil.go) 
 
 
 
 
 
-### <a name="github.com/billziss-gh/golib/util/ReadAeData">func</a> [ReadAeData](/src/target/ioae.go?s=329:394#L24)
+### <a name="github.com/billziss-gh/golib/util/ReadAeData">func</a> [ReadAeData](util/ioae.go#L24)
 ``` go
 func ReadAeData(path string, key []byte) (data []byte, err error)
 ```
 
 
-### <a name="github.com/billziss-gh/golib/util/ReadData">func</a> [ReadData](/src/target/ioutil.go?s=562:613#L36)
+### <a name="github.com/billziss-gh/golib/util/ReadData">func</a> [ReadData](util/ioutil.go#L36)
 ``` go
 func ReadData(path string) (data []byte, err error)
 ```
 
 
-### <a name="github.com/billziss-gh/golib/util/ReadFunc">func</a> [ReadFunc](/src/target/ioutil.go?s=316:412#L23)
+### <a name="github.com/billziss-gh/golib/util/ReadFunc">func</a> [ReadFunc](util/ioutil.go#L23)
 ``` go
 func ReadFunc(path string, fn func(*os.File) (interface{}, error)) (data interface{}, err error)
 ```
 
 
-### <a name="github.com/billziss-gh/golib/util/WriteAeData">func</a> [WriteAeData](/src/target/ioae.go?s=901:985#L56)
+### <a name="github.com/billziss-gh/golib/util/WriteAeData">func</a> [WriteAeData](util/ioae.go#L56)
 ``` go
 func WriteAeData(path string, perm os.FileMode, data []byte, key []byte) (err error)
 ```
 
 
-### <a name="github.com/billziss-gh/golib/util/WriteData">func</a> [WriteData](/src/target/ioutil.go?s=1248:1318#L74)
+### <a name="github.com/billziss-gh/golib/util/WriteData">func</a> [WriteData](util/ioutil.go#L74)
 ``` go
 func WriteData(path string, perm os.FileMode, data []byte) (err error)
 ```
 
 
-### <a name="github.com/billziss-gh/golib/util/WriteFunc">func</a> [WriteFunc](/src/target/ioutil.go?s=780:862#L48)
+### <a name="github.com/billziss-gh/golib/util/WriteFunc">func</a> [WriteFunc](util/ioutil.go#L48)
 ``` go
 func WriteFunc(path string, perm os.FileMode, fn func(*os.File) error) (err error)
 ```
