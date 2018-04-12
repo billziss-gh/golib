@@ -15,6 +15,7 @@ package errors
 import (
 	goerrors "errors"
 	"fmt"
+	"regexp"
 	"testing"
 )
 
@@ -41,12 +42,12 @@ func TestErrors(t *testing.T) {
 	}
 
 	E := `e2 (42)
-    	errors.TestErrors:github.com/billziss-gh/golib/errors/errors_test.go:24
+    	errors.TestErrors:github.com/billziss-gh/golib/errors/errors_test.go:25
 e1
-    	errors.TestErrors:github.com/billziss-gh/golib/errors/errors_test.go:23
+    	errors.TestErrors:github.com/billziss-gh/golib/errors/errors_test.go:24
 e0
-    	errors.TestErrors:github.com/billziss-gh/golib/errors/errors_test.go:22`
-	if E != fmt.Sprintf("%+v", e2) {
+    	errors.TestErrors:github.com/billziss-gh/golib/errors/errors_test.go:23`
+	if E != printPlusVStripVendor(e2) {
 		t.Error()
 	}
 
@@ -61,11 +62,11 @@ e0
 	}
 
 	G := `g2 (42)
-    	errors.TestErrors:github.com/billziss-gh/golib/errors/errors_test.go:28
+    	errors.TestErrors:github.com/billziss-gh/golib/errors/errors_test.go:29
 g1
-    	errors.TestErrors:github.com/billziss-gh/golib/errors/errors_test.go:27
+    	errors.TestErrors:github.com/billziss-gh/golib/errors/errors_test.go:28
 g0`
-	if G != fmt.Sprintf("%+v", g2) {
+	if G != printPlusVStripVendor(g2) {
 		t.Error()
 	}
 
@@ -183,12 +184,12 @@ func TestMessage(t *testing.T) {
 	}
 
 	E := `TestMessage: e2
-    	errors.TestMessage:github.com/billziss-gh/golib/errors/errors_test.go:179
+    	errors.TestMessage:github.com/billziss-gh/golib/errors/errors_test.go:180
 TestMessage
-    	errors.TestMessage:github.com/billziss-gh/golib/errors/errors_test.go:178
+    	errors.TestMessage:github.com/billziss-gh/golib/errors/errors_test.go:179
 TestMessage: e0
-    	errors.TestMessage:github.com/billziss-gh/golib/errors/errors_test.go:177`
-	if E != fmt.Sprintf("%+v", e2) {
+    	errors.TestMessage:github.com/billziss-gh/golib/errors/errors_test.go:178`
+	if E != printPlusVStripVendor(e2) {
 		t.Error()
 	}
 
@@ -202,12 +203,12 @@ TestMessage: e0
 		}
 
 		E := `TestMessage: e2
-    	errors.TestMessage.func1:github.com/billziss-gh/golib/errors/errors_test.go:198
+    	errors.TestMessage.func1:github.com/billziss-gh/golib/errors/errors_test.go:199
 TestMessage
-    	errors.TestMessage.func1:github.com/billziss-gh/golib/errors/errors_test.go:197
+    	errors.TestMessage.func1:github.com/billziss-gh/golib/errors/errors_test.go:198
 TestMessage: e0
-    	errors.TestMessage.func1:github.com/billziss-gh/golib/errors/errors_test.go:196`
-		if E != fmt.Sprintf("%+v", e2) {
+    	errors.TestMessage.func1:github.com/billziss-gh/golib/errors/errors_test.go:197`
+		if E != printPlusVStripVendor(e2) {
 			t.Error()
 		}
 	}()
@@ -227,12 +228,12 @@ func (i myint) testMessage(t *testing.T) {
 	}
 
 	E := `testMessage: e2
-    	errors.myint.testMessage:github.com/billziss-gh/golib/errors/errors_test.go:223
+    	errors.myint.testMessage:github.com/billziss-gh/golib/errors/errors_test.go:224
 testMessage
-    	errors.myint.testMessage:github.com/billziss-gh/golib/errors/errors_test.go:222
+    	errors.myint.testMessage:github.com/billziss-gh/golib/errors/errors_test.go:223
 testMessage: e0
-    	errors.myint.testMessage:github.com/billziss-gh/golib/errors/errors_test.go:221`
-	if E != fmt.Sprintf("%+v", e2) {
+    	errors.myint.testMessage:github.com/billziss-gh/golib/errors/errors_test.go:222`
+	if E != printPlusVStripVendor(e2) {
 		t.Error()
 	}
 
@@ -246,13 +247,19 @@ testMessage: e0
 		}
 
 		E := `testMessage: e2
-    	errors.myint.testMessage.func1:github.com/billziss-gh/golib/errors/errors_test.go:242
+    	errors.myint.testMessage.func1:github.com/billziss-gh/golib/errors/errors_test.go:243
 testMessage
-    	errors.myint.testMessage.func1:github.com/billziss-gh/golib/errors/errors_test.go:241
+    	errors.myint.testMessage.func1:github.com/billziss-gh/golib/errors/errors_test.go:242
 testMessage: e0
-    	errors.myint.testMessage.func1:github.com/billziss-gh/golib/errors/errors_test.go:240`
-		if E != fmt.Sprintf("%+v", e2) {
+    	errors.myint.testMessage.func1:github.com/billziss-gh/golib/errors/errors_test.go:241`
+		if E != printPlusVStripVendor(e2) {
 			t.Error()
 		}
 	}()
 }
+
+func printPlusVStripVendor(e error) string {
+	return vendor_re.ReplaceAllString(fmt.Sprintf("%+v", e), ":")
+}
+
+var vendor_re = regexp.MustCompilePOSIX(`:.*/vendor/`)
