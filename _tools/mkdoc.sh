@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# requires https://github.com/davecheney/godoc2md
+
 progdir=$(dirname "$0")
 pkglist=$(go list ./... | sed 's@.*/vendor/@@')
 
