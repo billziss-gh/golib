@@ -1,19 +1,21 @@
 # golib - Library of Go packages
 
 [//]: # (GODOC)
-- [appdata](#github.com/billziss-gh/golib/appdata) - Package appdata provides access to well known directories for applications. [:book:](https://godoc.org/github.com/billziss-gh/golib/appdata)
-- [cmd](#github.com/billziss-gh/golib/cmd) - Package cmd provides (sub-)command functionality for command-line programs. [:book:](https://godoc.org/github.com/billziss-gh/golib/cmd)
-- [config](#github.com/billziss-gh/golib/config) - Package config is used to read and write configuration files. [:book:](https://godoc.org/github.com/billziss-gh/golib/config)
-- [errors](#github.com/billziss-gh/golib/errors) - Package errors implements functions for advanced error handling. [:book:](https://godoc.org/github.com/billziss-gh/golib/errors)
-- [keyring](#github.com/billziss-gh/golib/keyring) - Package keyring implements functions for accessing and storing passwords in the system's keyring (Keychain on macOS, Credential Manager on Windows, Secret Service on Linux). [:book:](https://godoc.org/github.com/billziss-gh/golib/keyring)
-- [retry](#github.com/billziss-gh/golib/retry) - Package retry implements simple retry functionality. [:book:](https://godoc.org/github.com/billziss-gh/golib/retry)
-- [trace](#github.com/billziss-gh/golib/trace) - Package trace provides a simple tracing facility for Go functions. [:book:](https://godoc.org/github.com/billziss-gh/golib/trace)
-- [util](#github.com/billziss-gh/golib/util) -  [:book:](https://godoc.org/github.com/billziss-gh/golib/util)
+- [appdata](#github.com/billziss-gh/golib/appdata) - Package appdata provides access to well known directories for applications.
+- [cmd](#github.com/billziss-gh/golib/cmd) - Package cmd provides (sub-)command functionality for command-line programs.
+- [config](#github.com/billziss-gh/golib/config) - Package config is used to read and write configuration files.
+- [errors](#github.com/billziss-gh/golib/errors) - Package errors implements functions for advanced error handling.
+- [keyring](#github.com/billziss-gh/golib/keyring) - Package keyring implements functions for accessing and storing passwords in the system's keyring (Keychain on macOS, Credential Manager on Windows, Secret Service on Linux).
+- [retry](#github.com/billziss-gh/golib/retry) - Package retry implements simple retry functionality.
+- [trace](#github.com/billziss-gh/golib/trace) - Package trace provides a simple tracing facility for Go functions.
+- [util](#github.com/billziss-gh/golib/util) - 
 
 
 
 ----
 ## <a name="github.com/billziss-gh/golib/appdata">Package appdata</a>
+_[[godoc.org](https://godoc.org/github.com/billziss-gh/golib/appdata)]_
+
 `import "github.com/billziss-gh/golib/appdata"`
 
 * [Overview](#github.com/billziss-gh/golib/appdata/pkg-overview)
@@ -102,6 +104,8 @@ var DefaultAppData AppData
 
 ----
 ## <a name="github.com/billziss-gh/golib/cmd">Package cmd</a>
+_[[godoc.org](https://godoc.org/github.com/billziss-gh/golib/cmd)]_
+
 `import "github.com/billziss-gh/golib/cmd"`
 
 * [Overview](#github.com/billziss-gh/golib/cmd/pkg-overview)
@@ -292,6 +296,8 @@ PrintCmds prints help text for all commands to stderr.
 
 ----
 ## <a name="github.com/billziss-gh/golib/config">Package config</a>
+_[[godoc.org](https://godoc.org/github.com/billziss-gh/golib/config)]_
+
 `import "github.com/billziss-gh/golib/config"`
 
 * [Overview](#github.com/billziss-gh/golib/config/pkg-overview)
@@ -550,6 +556,8 @@ TypedSection is used to store a configuration section as typed properties.
 
 ----
 ## <a name="github.com/billziss-gh/golib/errors">Package errors</a>
+_[[godoc.org](https://godoc.org/github.com/billziss-gh/golib/errors)]_
+
 `import "github.com/billziss-gh/golib/errors"`
 
 * [Overview](#github.com/billziss-gh/golib/errors/pkg-overview)
@@ -641,6 +649,8 @@ where it was called.
 
 ----
 ## <a name="github.com/billziss-gh/golib/keyring">Package keyring</a>
+_[[godoc.org](https://godoc.org/github.com/billziss-gh/golib/keyring)]_
+
 `import "github.com/billziss-gh/golib/keyring"`
 
 * [Overview](#github.com/billziss-gh/golib/keyring/pkg-overview)
@@ -823,6 +833,8 @@ func (self *SystemKeyring) Set(service, user, pass string) error
 
 ----
 ## <a name="github.com/billziss-gh/golib/retry">Package retry</a>
+_[[godoc.org](https://godoc.org/github.com/billziss-gh/golib/retry)]_
+
 `import "github.com/billziss-gh/golib/retry"`
 
 * [Overview](#github.com/billziss-gh/golib/retry/pkg-overview)
@@ -909,6 +921,8 @@ Retry performs actions repeatedly until one of the actions returns false.
 
 ----
 ## <a name="github.com/billziss-gh/golib/trace">Package trace</a>
+_[[godoc.org](https://godoc.org/github.com/billziss-gh/golib/trace)]_
+
 `import "github.com/billziss-gh/golib/trace"`
 
 * [Overview](#github.com/billziss-gh/golib/trace/pkg-overview)
@@ -975,6 +989,8 @@ func Tracef(skip int, form string, vals ...interface{})
 
 ----
 ## <a name="github.com/billziss-gh/golib/util">Package util</a>
+_[[godoc.org](https://godoc.org/github.com/billziss-gh/golib/util)]_
+
 `import "github.com/billziss-gh/golib/util"`
 
 * [Overview](#github.com/billziss-gh/golib/util/pkg-overview)

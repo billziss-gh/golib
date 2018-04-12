@@ -9,7 +9,7 @@ progdir=$(dirname "$0")
     sed -n '1,/(GODOC)/p' README.md
     go list -f "{{.ImportPath}} {{.Doc}}" "$golib/..." | sed 's@.*/vendor/@@' |
     while read p d; do
-        echo "- [$(basename $p)](#$p) - $d [:book:](https://godoc.org/$p)"
+        echo "- [$(basename $p)](#$p) - $d"
     done
     go list "$golib/..." | sed 's@.*/vendor/@@' |
     while read p; do
