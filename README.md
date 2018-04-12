@@ -593,7 +593,7 @@ Inspired by <a href="https://github.com/pkg/errors">https://github.com/pkg/error
 
 
 
-### <a name="github.com/billziss-gh/golib/errors/Attachment">func</a> [Attachment](errors/errors.go#L189)
+### <a name="github.com/billziss-gh/golib/errors/Attachment">func</a> [Attachment](errors/errors.go#L185)
 ``` go
 func Attachment(err error) interface{}
 ```
@@ -602,7 +602,7 @@ Attachment will return additional information attached to this error
 
 
 
-### <a name="github.com/billziss-gh/golib/errors/Cause">func</a> [Cause](errors/errors.go#L178)
+### <a name="github.com/billziss-gh/golib/errors/Cause">func</a> [Cause](errors/errors.go#L174)
 ``` go
 func Cause(err error) error
 ```
@@ -610,7 +610,7 @@ Cause will return the error that caused this error (if any).
 
 
 
-### <a name="github.com/billziss-gh/golib/errors/HasAttachment">func</a> [HasAttachment](errors/errors.go#L211)
+### <a name="github.com/billziss-gh/golib/errors/HasAttachment">func</a> [HasAttachment](errors/errors.go#L207)
 ``` go
 func HasAttachment(err error, attachment interface{}) bool
 ```
@@ -619,7 +619,7 @@ of this error.
 
 
 
-### <a name="github.com/billziss-gh/golib/errors/HasCause">func</a> [HasCause](errors/errors.go#L200)
+### <a name="github.com/billziss-gh/golib/errors/HasCause">func</a> [HasCause](errors/errors.go#L196)
 ``` go
 func HasCause(err error, cause error) bool
 ```
@@ -967,13 +967,13 @@ var (
 ```
 
 
-### <a name="github.com/billziss-gh/golib/trace/Trace">func</a> [Trace](trace/trace.go#L128)
+### <a name="github.com/billziss-gh/golib/trace/Trace">func</a> [Trace](trace/trace.go#L131)
 ``` go
 func Trace(skip int, prfx string, vals ...interface{}) func(vals ...interface{})
 ```
 
 
-### <a name="github.com/billziss-gh/golib/trace/Tracef">func</a> [Tracef](trace/trace.go#L159)
+### <a name="github.com/billziss-gh/golib/trace/Tracef">func</a> [Tracef](trace/trace.go#L162)
 ``` go
 func Tracef(skip int, form string, vals ...interface{})
 ```
