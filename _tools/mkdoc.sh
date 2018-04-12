@@ -9,7 +9,7 @@ pkglist=$(go list "$golib/..." | sed 's@.*/vendor/@@')
 (
     sed -n '1,/(GODOC)/p' README.md
     for p in $pkglist; do
-        echo "- [$(basename $p)](#$p) [:book:](https://godoc.org/$p)"
+        echo "- [package $(basename $p)](#$p) [:book:](https://godoc.org/$p)"
     done
     for p in $pkglist; do
         $GOPATH/bin/godoc2md -template "$progdir/godoc2md.templ" $p |
