@@ -936,6 +936,7 @@ Package terminal provides functionality for terminals.
 
 
 ### <a name="github.com/billziss-gh/golib/terminal/pkg-index">Index</a>
+* [Variables](#github.com/billziss-gh/golib/terminal/pkg-variables)
 * [func AnsiEscapeCode(code string) string](#github.com/billziss-gh/golib/terminal/AnsiEscapeCode)
 * [func Escape(s string, delims string, escape func(string) string) string](#github.com/billziss-gh/golib/terminal/Escape)
 * [func IsAnsiTerminal(fd uintptr) bool](#github.com/billziss-gh/golib/terminal/IsAnsiTerminal)
@@ -945,10 +946,17 @@ Package terminal provides functionality for terminals.
 
 
 ##### <a name="github.com/billziss-gh/golib/terminal/pkg-files">Package files</a>
-[codes.go](terminal/codes.go) [escape.go](terminal/escape.go) [terminal.go](terminal/terminal.go) [terminal_darwin.go](terminal/terminal_darwin.go) 
+[codes.go](terminal/codes.go) [escape.go](terminal/escape.go) [stdio.go](terminal/stdio.go) [terminal.go](terminal/terminal.go) [terminal_darwin.go](terminal/terminal_darwin.go) 
 
 
 
+### <a name="github.com/billziss-gh/golib/terminal/pkg-variables">Variables</a>
+``` go
+var Stderr io.Writer
+```
+``` go
+var Stdout io.Writer
+```
 
 
 ### <a name="github.com/billziss-gh/golib/terminal/AnsiEscapeCode">func</a> [AnsiEscapeCode](terminal/codes.go#L24)
@@ -1068,17 +1076,19 @@ file-style patterns containing wildcards such as * and ?.
 var (
     Verbose = false
     Pattern = os.Getenv("GOLIB_TRACE")
+
+    Logger = log.New(terminal.Stderr, "", log.LstdFlags)
 )
 ```
 
 
-### <a name="github.com/billziss-gh/golib/trace/Trace">func</a> [Trace](trace/trace.go#L131)
+### <a name="github.com/billziss-gh/golib/trace/Trace">func</a> [Trace](trace/trace.go#L135)
 ``` go
 func Trace(skip int, prfx string, vals ...interface{}) func(vals ...interface{})
 ```
 
 
-### <a name="github.com/billziss-gh/golib/trace/Tracef">func</a> [Tracef](trace/trace.go#L162)
+### <a name="github.com/billziss-gh/golib/trace/Tracef">func</a> [Tracef](trace/trace.go#L166)
 ``` go
 func Tracef(skip int, form string, vals ...interface{})
 ```
