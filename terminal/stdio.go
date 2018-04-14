@@ -21,11 +21,15 @@ var Stdout io.Writer
 var Stderr io.Writer
 
 func init() {
-	escape := NullEscapeCode
 	if IsAnsiTerminal(os.Stdout.Fd()) {
-		escape = AnsiEscapeCode
+		Stdout = NewEscapeWriter(os.Stdout, "{{ }}", AnsiEscapeCode)
+	} else {
+		Stdout = NewEscapeWriter(os.Stdout, "{{ }}", NullEscapeCode)
 	}
 
-	Stdout = NewEscapeWriter(os.Stdout, "{{ }}", escape)
-	Stderr = NewEscapeWriter(os.Stderr, "{{ }}", escape)
+	if IsAnsiTerminal(os.Stderr.Fd()) {
+		Stderr = NewEscapeWriter(os.Stderr, "{{ }}", AnsiEscapeCode)
+	} else {
+		Stderr = NewEscapeWriter(os.Stderr, "{{ }}", NullEscapeCode)
+	}
 }
