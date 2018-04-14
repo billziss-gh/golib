@@ -18,8 +18,8 @@ func IsTerminal(fd uintptr) bool {
 	return false
 }
 
-// IsColorTerminal determines if the file descriptor describes a terminal
-// that has colors.
-func IsColorTerminal(fd uintptr) bool {
+// IsAnsiTerminal determines if the file descriptor describes a terminal
+// that has ANSI capabilities.
+func IsAnsiTerminal(fd uintptr) bool {
 	return false
 }
