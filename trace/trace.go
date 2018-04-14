@@ -145,14 +145,14 @@ func Trace(skip int, prfx string, vals ...interface{}) func(vals ...interface{})
 
 	args := traceJoin(false, vals)
 	return func(vals ...interface{}) {
-		form := "%v{{bold}}%v{{off}}(%v) = %v"
+		form := "%v{{bold blue}}%v{{off}}(%v) = %v"
 		rslt := ""
 		rcvr := recover()
 		if nil != rcvr {
 			rslt = fmt.Sprintf("!PANIC:%v", rcvr)
 		} else {
 			if len(vals) != 1 {
-				form = "%v{{bold}}%v{{off}}(%v) = (%v)"
+				form = "%v{{bold blue}}%v{{off}}(%v) = (%v)"
 			}
 			rslt = traceJoin(true, vals)
 		}
