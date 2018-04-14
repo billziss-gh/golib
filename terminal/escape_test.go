@@ -29,29 +29,41 @@ var testEscapeDelims = []string{
 	`{{{{ }}}}`,
 	`{{{{ }}}}`,
 	`{{{{ }}}}`,
+	`{{{{ }}}}`,
 	`{{ }}`,
 	`{{ }}`,
 	`{{ }}`,
+	`{ }`,
+	`{ }`,
+	`{ }`,
 }
 var testEscapeInputs = []string{
 	`hello world`,
 	`hello world {{{{red`,
+	`hello }}}}world`,
 	`hello {{{{red}}}} world, hello {{{{green}}}} world, {{{{}}}}he{{{l}}}lo {{{{blue`,
 	`hello {{{{red}}}} world, hello {{{{green}}}} world, {{{{}}}}he{{{l}}}lo {{{{blue}}}} world`,
 	`hello {{{{red}}}} world, hello {{{{green}}}} world, {{{{}}}}he{{{l}}}lo {{{{blue}}} }}}} world`,
 	`hello {{red}} world, hello {{green}} world, {{}}he{l}lo {{blue`,
 	`hello {{red}} world, hello {{green}} world, {{}}he{l}lo {{blue}} world`,
 	`hello {{red}} world, hello {{green}} world, {{}}he{l}lo {{blue} }} world`,
+	`hello {red} world, hello {green} world, {}he{l}lo {{blue`,
+	`hello {red} world, hello {green} world, {}he{l}lo {{blue}} world`,
+	`hello {red} world, hello {green} world, {}he{l}lo {{blue} }} world`,
 }
 var testEscapeOutputs = []string{
 	`hello world`,
 	`hello world `,
+	`hello }}}}world`,
 	`hello RED world, hello GREEN world, he{{{l}}}lo `,
 	`hello RED world, hello GREEN world, he{{{l}}}lo BLUE world`,
 	`hello RED world, hello GREEN world, he{{{l}}}lo BLUE}}}  world`,
 	`hello RED world, hello GREEN world, he{l}lo `,
 	`hello RED world, hello GREEN world, he{l}lo BLUE world`,
 	`hello RED world, hello GREEN world, he{l}lo BLUE}  world`,
+	`hello RED world, hello GREEN world, heLlo `,
+	`hello RED world, hello GREEN world, heLlo {BLUE} world`,
+	`hello RED world, hello GREEN world, heLlo {BLUE }} world`,
 }
 
 func TestEscape(t *testing.T) {
