@@ -7,6 +7,7 @@
 - [errors](#github.com/billziss-gh/golib/errors) - Package errors implements functions for advanced error handling.
 - [keyring](#github.com/billziss-gh/golib/keyring) - Package keyring implements functions for accessing and storing passwords in the system's keyring (Keychain on macOS, Credential Manager on Windows, Secret Service on Linux).
 - [retry](#github.com/billziss-gh/golib/retry) - Package retry implements simple retry functionality.
+- [terminal](#github.com/billziss-gh/golib/terminal) - Package terminal provides functionality for terminals.
 - [trace](#github.com/billziss-gh/golib/trace) - Package trace provides a simple tracing facility for Go functions.
 - [util](#github.com/billziss-gh/golib/util) - Package util contains general utility functions.
 
@@ -909,6 +910,105 @@ func Retry(actions ...func(int) bool)
 ```
 Retry performs actions repeatedly until one of the actions returns false.
 
+
+
+
+
+
+
+
+
+
+
+----
+## <a name="github.com/billziss-gh/golib/terminal">Package terminal</a>
+_[[godoc.org](https://godoc.org/github.com/billziss-gh/golib/terminal)]_
+
+`import "github.com/billziss-gh/golib/terminal"`
+
+* [Overview](#github.com/billziss-gh/golib/terminal/pkg-overview)
+* [Index](#github.com/billziss-gh/golib/terminal/pkg-index)
+
+### <a name="github.com/billziss-gh/golib/terminal/pkg-overview">Overview</a>
+Package terminal provides functionality for terminals.
+
+
+
+
+### <a name="github.com/billziss-gh/golib/terminal/pkg-index">Index</a>
+* [func AnsiEscapeCode(code string) string](#github.com/billziss-gh/golib/terminal/AnsiEscapeCode)
+* [func Escape(s string, delims string, escape func(string) string) string](#github.com/billziss-gh/golib/terminal/Escape)
+* [func IsAnsiTerminal(fd uintptr) bool](#github.com/billziss-gh/golib/terminal/IsAnsiTerminal)
+* [func IsTerminal(fd uintptr) bool](#github.com/billziss-gh/golib/terminal/IsTerminal)
+* [func NewEscapeWriter(writer io.Writer, delims string, escape func(string) string) io.Writer](#github.com/billziss-gh/golib/terminal/NewEscapeWriter)
+* [func NullEscapeCode(code string) string](#github.com/billziss-gh/golib/terminal/NullEscapeCode)
+
+
+##### <a name="github.com/billziss-gh/golib/terminal/pkg-files">Package files</a>
+[codes.go](terminal/codes.go) [escape.go](terminal/escape.go) [terminal.go](terminal/terminal.go) [terminal_darwin.go](terminal/terminal_darwin.go) 
+
+
+
+
+
+### <a name="github.com/billziss-gh/golib/terminal/AnsiEscapeCode">func</a> [AnsiEscapeCode](terminal/codes.go#L21)
+``` go
+func AnsiEscapeCode(code string) string
+```
+
+
+### <a name="github.com/billziss-gh/golib/terminal/Escape">func</a> [Escape](terminal/escape.go#L28)
+``` go
+func Escape(s string, delims string, escape func(string) string) string
+```
+Escape replaces escape code instances within a string. Escape codes
+must be delimited using the delimiters in the delims parameter, which
+has the syntax "START END". For example, to use {{ and }} as delimiters
+specify "{{ }}".
+
+For consistency with NewEscapeWriter, Escape will discard an unterminated escape
+code. For example, if delims is "{{ }}" and the string s is "hello {{world",
+the resulting string will be "hello ".
+
+
+
+### <a name="github.com/billziss-gh/golib/terminal/IsAnsiTerminal">func</a> [IsAnsiTerminal](terminal/terminal.go#L23)
+``` go
+func IsAnsiTerminal(fd uintptr) bool
+```
+IsAnsiTerminal determines if the file descriptor describes a terminal
+that has ANSI capabilities.
+
+
+
+### <a name="github.com/billziss-gh/golib/terminal/IsTerminal">func</a> [IsTerminal](terminal/terminal.go#L17)
+``` go
+func IsTerminal(fd uintptr) bool
+```
+IsTerminal determines if the file descriptor describes a terminal.
+
+
+
+### <a name="github.com/billziss-gh/golib/terminal/NewEscapeWriter">func</a> [NewEscapeWriter](terminal/escape.go#L178)
+``` go
+func NewEscapeWriter(writer io.Writer, delims string, escape func(string) string) io.Writer
+```
+NewEscapeWriter replaces escape code instances within a string. Escape codes
+must be delimited using the delimiters in the delims parameter, which
+has the syntax "START END". For example, to use {{ and }} as delimiters
+specify "{{ }}".
+
+Because NewEscapeWriter is an io.Writer it cannot know when the last Write
+will be received. For this reason it will discard an unterminated escape
+code. For example, if delims is "{{ }}" and the string s is "hello {{world",
+the resulting string will be "hello ".
+
+
+
+### <a name="github.com/billziss-gh/golib/terminal/NullEscapeCode">func</a> [NullEscapeCode](terminal/codes.go#L17)
+``` go
+func NullEscapeCode(code string) string
+```
 
 
 
