@@ -1,5 +1,5 @@
 /*
- * replace_test.go
+ * escape_test.go
  *
  * Copyright 2018 Bill Zissimopoulos
  */
@@ -23,7 +23,7 @@ func testCodes(s string) string {
 	return strings.ToUpper(s)
 }
 
-var testReplaceDelims = []string{
+var testEscapeDelims = []string{
 	`{{{{ }}}}`,
 	`{{{{ }}}}`,
 	`{{{{ }}}}`,
@@ -33,7 +33,7 @@ var testReplaceDelims = []string{
 	`{{ }}`,
 	`{{ }}`,
 }
-var testReplaceInputs = []string{
+var testEscapeInputs = []string{
 	`hello world`,
 	`hello world {{{{red`,
 	`hello {{{{red}}}} world, hello {{{{green}}}} world, {{{{}}}}he{{{l}}}lo {{{{blue`,
@@ -43,7 +43,7 @@ var testReplaceInputs = []string{
 	`hello {{red}} world, hello {{green}} world, {{}}he{l}lo {{blue}} world`,
 	`hello {{red}} world, hello {{green}} world, {{}}he{l}lo {{blue} }} world`,
 }
-var testReplaceOutputs = []string{
+var testEscapeOutputs = []string{
 	`hello world`,
 	`hello world `,
 	`hello RED world, hello GREEN world, he{{{l}}}lo `,
@@ -54,28 +54,28 @@ var testReplaceOutputs = []string{
 	`hello RED world, hello GREEN world, he{l}lo BLUE}  world`,
 }
 
-func TestReplace(t *testing.T) {
-	for i := range testReplaceDelims {
-		r := Replace(testReplaceInputs[i], testReplaceDelims[i], testCodes)
-		if r != testReplaceOutputs[i] {
+func TestEscape(t *testing.T) {
+	for i := range testEscapeDelims {
+		r := Escape(testEscapeInputs[i], testEscapeDelims[i], testCodes)
+		if r != testEscapeOutputs[i] {
 			t.Errorf("%d %#v", i, r)
 		}
 	}
 }
 
-func TestReplaceWriter(t *testing.T) {
+func TestEscapeWriter(t *testing.T) {
 	for j := 0; 1000 > j; j++ {
-		for i := range testReplaceDelims {
+		for i := range testEscapeDelims {
 			var buf bytes.Buffer
-			w := NewReplaceWriter(&buf, testReplaceDelims[i], testCodes)
+			w := NewEscapeWriter(&buf, testEscapeDelims[i], testCodes)
 
-			for l, h := 0, 0; len(testReplaceInputs[i]) > l; l = h {
-				h = l + rand.Intn(len(testReplaceInputs[i]))
-				if len(testReplaceInputs[i]) < h {
-					h = len(testReplaceInputs[i])
+			for l, h := 0, 0; len(testEscapeInputs[i]) > l; l = h {
+				h = l + rand.Intn(len(testEscapeInputs[i]))
+				if len(testEscapeInputs[i]) < h {
+					h = len(testEscapeInputs[i])
 				}
 
-				b := []byte(testReplaceInputs[i][l:h])
+				b := []byte(testEscapeInputs[i][l:h])
 				n, err := w.Write(b)
 				if n != len(b) || nil != err {
 					t.Error(j, i)
@@ -83,7 +83,7 @@ func TestReplaceWriter(t *testing.T) {
 			}
 
 			r := buf.String()
-			if r != testReplaceOutputs[i] {
+			if r != testEscapeOutputs[i] {
 				t.Errorf("%d %d %#v", j, i, r)
 			}
 		}
