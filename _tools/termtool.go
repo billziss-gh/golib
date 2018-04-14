@@ -48,7 +48,11 @@ func main() {
 		"bgwhite",
 	}
 
-	writer := terminal.NewEscapeWriter(os.Stdout, "{{ }}", terminal.AnsiEscapeCode)
+	escape := terminal.NullEscapeCode
+	if terminal.IsAnsiTerminal(fd) {
+		escape = terminal.AnsiEscapeCode
+	}
+	writer := terminal.NewEscapeWriter(os.Stdout, "{{ }}", escape)
 	for _, c := range codes {
 		fmt.Fprintf(writer, "{{%s}}%-16s{{bold %s}}bold %-16s{{reset}}\n", c, c, c, c)
 	}
