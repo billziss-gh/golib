@@ -951,10 +951,12 @@ Package terminal provides functionality for terminals.
 
 
 
-### <a name="github.com/billziss-gh/golib/terminal/AnsiEscapeCode">func</a> [AnsiEscapeCode](terminal/codes.go#L21)
+### <a name="github.com/billziss-gh/golib/terminal/AnsiEscapeCode">func</a> [AnsiEscapeCode](terminal/codes.go#L24)
 ``` go
 func AnsiEscapeCode(code string) string
 ```
+AnsiEscapeCode translates a named escape code to its ANSI equivalent.
+
 
 
 ### <a name="github.com/billziss-gh/golib/terminal/Escape">func</a> [Escape](terminal/escape.go#L28)
@@ -1005,10 +1007,13 @@ the resulting string will be "hello ".
 
 
 
-### <a name="github.com/billziss-gh/golib/terminal/NullEscapeCode">func</a> [NullEscapeCode](terminal/codes.go#L17)
+### <a name="github.com/billziss-gh/golib/terminal/NullEscapeCode">func</a> [NullEscapeCode](terminal/codes.go#L19)
 ``` go
 func NullEscapeCode(code string) string
 ```
+NullEscapeCode translates a named escape code to the empty string.
+It is used to eliminate escape codes.
+
 
 
 

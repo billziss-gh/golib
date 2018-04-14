@@ -14,19 +14,22 @@ package terminal
 
 import "strings"
 
+// NullEscapeCode translates a named escape code to the empty string.
+// It is used to eliminate escape codes.
 func NullEscapeCode(code string) string {
 	return ""
 }
 
+// AnsiEscapeCode translates a named escape code to its ANSI equivalent.
 func AnsiEscapeCode(code string) string {
 	parts := strings.Split(code, " ")
 	for i, p := range parts {
-		parts[i] = ansiColors[p]
+		parts[i] = ansiCodes[p]
 	}
 	return "\033[" + strings.Join(parts, ";") + "m"
 }
 
-var ansiColors = map[string]string{
+var ansiCodes = map[string]string{
 	"reset":     "0",
 	"bold":      "1",
 	"black":     "30",
