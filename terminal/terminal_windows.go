@@ -45,7 +45,7 @@ func isAnsiTerminal(fd uintptr) bool {
 		}
 
 		mode |= _ENABLE_VIRTUAL_TERMINAL_PROCESSING
-		res, _, _ := setConsoleMode.Call(fd, mode)
+		res, _, _ := setConsoleMode.Call(fd, uintptr(mode))
 		if 0 != res {
 			res, _, _ := getConsoleMode.Call(fd, uintptr(unsafe.Pointer(&mode)))
 			if 0 != res {
