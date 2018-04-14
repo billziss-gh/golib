@@ -30,7 +30,7 @@ func AnsiEscapeCode(code string) string {
 }
 
 var ansiCodes = map[string]string{
-	"reset":     "0",
+	"off":       "0",
 	"bold":      "1",
 	"black":     "30",
 	"red":       "31",
