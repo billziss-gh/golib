@@ -15,11 +15,11 @@ package terminal
 
 // IsTerminal determines if the file descriptor describes a terminal.
 func IsTerminal(fd uintptr) bool {
-	return false
+	return isTerminal(fd)
 }
 
 // IsAnsiTerminal determines if the file descriptor describes a terminal
 // that has ANSI capabilities.
 func IsAnsiTerminal(fd uintptr) bool {
-	return false
+	return isAnsiTerminal(fd)
 }
