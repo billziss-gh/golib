@@ -1,0 +1,25 @@
+/*
+ * terminal.go
+ *
+ * Copyright 2018 Bill Zissimopoulos
+ */
+/*
+ * This file is part of golib.
+ *
+ * It is licensed under the MIT license. The full license text can be found
+ * in the License.txt file at the root of this project.
+ */
+
+// Package terminal provides functionality for terminals.
+package terminal
+
+// IsTerminal determines if the file descriptor describes a terminal.
+func IsTerminal(fd uintptr) bool {
+	return false
+}
+
+// IsColorTerminal determines if the file descriptor describes a terminal
+// that has colors.
+func IsColorTerminal(fd uintptr) bool {
+	return false
+}
