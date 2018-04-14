@@ -32,11 +32,15 @@ import (
 	"path"
 	"runtime"
 	"strings"
+
+	"github.com/billziss-gh/golib/terminal"
 )
 
 var (
 	Verbose = false
 	Pattern = os.Getenv("GOLIB_TRACE")
+
+	Logger = log.New(terminal.Stderr, "", log.LstdFlags)
 )
 
 func traceName(skip int) string {
@@ -141,18 +145,18 @@ func Trace(skip int, prfx string, vals ...interface{}) func(vals ...interface{})
 
 	args := traceJoin(false, vals)
 	return func(vals ...interface{}) {
-		form := "%v%v(%v) = %v"
+		form := "%v{{bold}}%v{{off}}(%v) = %v"
 		rslt := ""
 		rcvr := recover()
 		if nil != rcvr {
 			rslt = fmt.Sprintf("!PANIC:%v", rcvr)
 		} else {
 			if len(vals) != 1 {
-				form = "%v%v(%v) = (%v)"
+				form = "%v{{bold}}%v{{off}}(%v) = (%v)"
 			}
 			rslt = traceJoin(true, vals)
 		}
-		log.Printf(form, prfx, name, args, rslt)
+		Logger.Printf(form, prfx, name, args, rslt)
 		if nil != rcvr {
 			panic(rcvr)
 		}
@@ -165,5 +169,5 @@ func Tracef(skip int, form string, vals ...interface{}) {
 		return
 	}
 
-	log.Printf(strings.Replace(name, "%", "%%", -1)+": "+form, vals...)
+	Logger.Printf(strings.Replace(name, "%", "%%", -1)+": "+form, vals...)
 }
