@@ -12,10 +12,47 @@
 
 package terminal
 
+import (
+	"syscall"
+	"unsafe"
+)
+
+const (
+	_ENABLE_VIRTUAL_TERMINAL_PROCESSING = 0x0200
+)
+
+var (
+	dll            = syscall.NewLazyDLL("kernel32.dll")
+	getConsoleMode = dll.NewProc("GetConsoleMode")
+	setConsoleMode = dll.NewProc("SetConsoleMode")
+)
+
 func isTerminal(fd uintptr) bool {
-	return false
+	var mode uint32
+	res, _, _ := getConsoleMode.Call(fd, uintptr(unsafe.Pointer(&mode)))
+	return 0 != res
 }
 
 func isAnsiTerminal(fd uintptr) bool {
+	// This is a bit hacky. On Win10 (later versions) ANSI support exists,
+	// but is disabled by default. So we enable it, when asked for it!
+
+	var mode uint32
+	res, _, _ := getConsoleMode.Call(fd, uintptr(unsafe.Pointer(&mode)))
+	if 0 != res {
+		if 0 != mode&_ENABLE_VIRTUAL_TERMINAL_PROCESSING {
+			return true
+		}
+
+		mode |= _ENABLE_VIRTUAL_TERMINAL_PROCESSING
+		res, _, _ := setConsoleMode.Call(fd, mode)
+		if 0 != res {
+			res, _, _ := getConsoleMode.Call(fd, uintptr(unsafe.Pointer(&mode)))
+			if 0 != res {
+				return 0 != mode&_ENABLE_VIRTUAL_TERMINAL_PROCESSING
+			}
+		}
+	}
+
 	return false
 }
