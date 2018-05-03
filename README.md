@@ -584,7 +584,7 @@ package config.
 
 
 
-### <a name="github.com/billziss-gh/golib/config/flag/Visit">func</a> [Visit](flag/flag.go#L24)
+### <a name="github.com/billziss-gh/golib/config/flag/Visit">func</a> [Visit](config/flag/flag.go#L24)
 ``` go
 func Visit(flagSet *flag.FlagSet, section config.TypedSection, names ...string)
 ```
@@ -592,7 +592,7 @@ Visit gets the flags present in a command line as a typed configuration section.
 
 
 
-### <a name="github.com/billziss-gh/golib/config/flag/VisitAll">func</a> [VisitAll](flag/flag.go#L51)
+### <a name="github.com/billziss-gh/golib/config/flag/VisitAll">func</a> [VisitAll](config/flag/flag.go#L51)
 ``` go
 func VisitAll(flagSet *flag.FlagSet, section config.TypedSection, names ...string)
 ```

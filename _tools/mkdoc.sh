@@ -13,11 +13,13 @@ cd $(dirname "$0")/..
     done
     go list ./... |
     while read p; do
+        t=${p#github.com/*/*/vendor/}
+        t=${t#$golib/}
         $GOPATH/bin/godoc2md -template _tools/godoc2md.templ $p |
         sed \
             -e "s@github.com/[^/]*/[^/]*/vendor/@@g"\
             -e "s@/src/$golib/@@g"\
-            -e "s@/src/target@$(basename $p)@g"\
+            -e "s@/src/target@$t@g"\
             -e "s@?s=[0-9][0-9]*:[0-9][0-9]*#@#@g"
     done
 ) > README.md.new
