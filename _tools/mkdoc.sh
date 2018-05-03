@@ -9,7 +9,7 @@ cd $(dirname "$0")/..
     sed -n '1,/(GODOC)/p' README.md
     go list -f "{{.ImportPath}} {{.Doc}}" ./... | sed 's@.*/vendor/@@' |
     while read p d; do
-        echo "- [$(basename $p)](#$p) - $d"
+        echo "- [${p#$golib/}](#$p) - $d"
     done
     go list ./... |
     while read p; do

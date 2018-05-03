@@ -4,6 +4,7 @@
 - [appdata](#github.com/billziss-gh/golib/appdata) - Package appdata provides access to well known directories for applications.
 - [cmd](#github.com/billziss-gh/golib/cmd) - Package cmd provides (sub-)command functionality for command-line programs.
 - [config](#github.com/billziss-gh/golib/config) - Package config is used to read and write configuration files.
+- [config/flag](#github.com/billziss-gh/golib/config/flag) - Package flag facilitates use of the standard library package flag with package config.
 - [errors](#github.com/billziss-gh/golib/errors) - Package errors implements functions for advanced error handling.
 - [keyring](#github.com/billziss-gh/golib/keyring) - Package keyring implements functions for accessing and storing passwords in the system's keyring (Keychain on macOS, Credential Manager on Windows, Secret Service on Linux).
 - [retry](#github.com/billziss-gh/golib/retry) - Package retry implements simple retry functionality.
@@ -544,6 +545,58 @@ TypedSection is used to store a configuration section as typed properties.
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+----
+## <a name="github.com/billziss-gh/golib/config/flag">Package flag</a>
+_[[godoc.org](https://godoc.org/github.com/billziss-gh/golib/config/flag)]_
+
+`import "github.com/billziss-gh/golib/config/flag"`
+
+* [Overview](#github.com/billziss-gh/golib/config/flag/pkg-overview)
+* [Index](#github.com/billziss-gh/golib/config/flag/pkg-index)
+
+### <a name="github.com/billziss-gh/golib/config/flag/pkg-overview">Overview</a>
+Package flag facilitates use of the standard library package flag with
+package config.
+
+
+
+
+### <a name="github.com/billziss-gh/golib/config/flag/pkg-index">Index</a>
+* [func Visit(flagSet *flag.FlagSet, section config.TypedSection, names ...string)](#github.com/billziss-gh/golib/config/flag/Visit)
+* [func VisitAll(flagSet *flag.FlagSet, section config.TypedSection, names ...string)](#github.com/billziss-gh/golib/config/flag/VisitAll)
+
+
+##### <a name="github.com/billziss-gh/golib/config/flag/pkg-files">Package files</a>
+[flag.go](config/flag/flag.go) 
+
+
+
+
+
+### <a name="github.com/billziss-gh/golib/config/flag/Visit">func</a> [Visit](flag/flag.go#L24)
+``` go
+func Visit(flagSet *flag.FlagSet, section config.TypedSection, names ...string)
+```
+Visit gets the flags present in a command line as a typed configuration section.
+
+
+
+### <a name="github.com/billziss-gh/golib/config/flag/VisitAll">func</a> [VisitAll](flag/flag.go#L51)
+``` go
+func VisitAll(flagSet *flag.FlagSet, section config.TypedSection, names ...string)
+```
+VisitAll gets all flags as a typed configuration section.
 
 
 
