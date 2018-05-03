@@ -4,7 +4,7 @@
 - [appdata](#github.com/billziss-gh/golib/appdata) - Package appdata provides access to well known directories for applications.
 - [cmd](#github.com/billziss-gh/golib/cmd) - Package cmd provides (sub-)command functionality for command-line programs.
 - [config](#github.com/billziss-gh/golib/config) - Package config is used to read and write configuration files.
-- [config/flag](#github.com/billziss-gh/golib/config/flag) - Package flag facilitates use of the standard library package flag with package config.
+    - [flag](#github.com/billziss-gh/golib/config/flag) - Package flag facilitates use of the standard library package flag with package config.
 - [errors](#github.com/billziss-gh/golib/errors) - Package errors implements functions for advanced error handling.
 - [keyring](#github.com/billziss-gh/golib/keyring) - Package keyring implements functions for accessing and storing passwords in the system's keyring (Keychain on macOS, Credential Manager on Windows, Secret Service on Linux).
 - [retry](#github.com/billziss-gh/golib/retry) - Package retry implements simple retry functionality.
