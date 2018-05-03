@@ -1,16 +1,16 @@
 # golib - Library of Go packages
 
 [//]: # (GODOC)
-- [appdata](#github.com/billziss-gh/golib/appdata) - Package appdata provides access to well known directories for applications.
-- [cmd](#github.com/billziss-gh/golib/cmd) - Package cmd provides (sub-)command functionality for command-line programs.
-- [config](#github.com/billziss-gh/golib/config) - Package config is used to read and write configuration files.
-    - [flag](#github.com/billziss-gh/golib/config/flag) - Package flag facilitates use of the standard library package flag with package config.
-- [errors](#github.com/billziss-gh/golib/errors) - Package errors implements functions for advanced error handling.
-- [keyring](#github.com/billziss-gh/golib/keyring) - Package keyring implements functions for accessing and storing passwords in the system's keyring (Keychain on macOS, Credential Manager on Windows, Secret Service on Linux).
-- [retry](#github.com/billziss-gh/golib/retry) - Package retry implements simple retry functionality.
-- [terminal](#github.com/billziss-gh/golib/terminal) - Package terminal provides functionality for terminals.
-- [trace](#github.com/billziss-gh/golib/trace) - Package trace provides a simple tracing facility for Go functions.
-- [util](#github.com/billziss-gh/golib/util) - Package util contains general utility functions.
+* [appdata](#github.com/billziss-gh/golib/appdata) - Package appdata provides access to well known directories for applications.
+* [cmd](#github.com/billziss-gh/golib/cmd) - Package cmd provides (sub-)command functionality for command-line programs.
+* [config](#github.com/billziss-gh/golib/config) - Package config is used to read and write configuration files.
+  * [flag](#github.com/billziss-gh/golib/config/flag) - Package flag facilitates use of the standard library package flag with package config.
+* [errors](#github.com/billziss-gh/golib/errors) - Package errors implements functions for advanced error handling.
+* [keyring](#github.com/billziss-gh/golib/keyring) - Package keyring implements functions for accessing and storing passwords in the system's keyring (Keychain on macOS, Credential Manager on Windows, Secret Service on Linux).
+* [retry](#github.com/billziss-gh/golib/retry) - Package retry implements simple retry functionality.
+* [terminal](#github.com/billziss-gh/golib/terminal) - Package terminal provides functionality for terminals.
+* [trace](#github.com/billziss-gh/golib/trace) - Package trace provides a simple tracing facility for Go functions.
+* [util](#github.com/billziss-gh/golib/util) - Package util contains general utility functions.
 
 
 
@@ -124,6 +124,7 @@ This package works closely with the standard library flag package.
 * [Variables](#github.com/billziss-gh/golib/cmd/pkg-variables)
 * [func PrintCmds()](#github.com/billziss-gh/golib/cmd/PrintCmds)
 * [func Run()](#github.com/billziss-gh/golib/cmd/Run)
+* [func UsageFunc(args ...interface{}) func()](#github.com/billziss-gh/golib/cmd/UsageFunc)
 * [type Cmd](#github.com/billziss-gh/golib/cmd/Cmd)
   * [func Add(name string, main func(*Cmd, []string)) *Cmd](#github.com/billziss-gh/golib/cmd/Add)
   * [func (self *Cmd) GetFlag(name string) interface{}](#github.com/billziss-gh/golib/cmd/Cmd.GetFlag)
@@ -133,6 +134,7 @@ This package works closely with the standard library flag package.
   * [func (self *CmdMap) Get(name string) *Cmd](#github.com/billziss-gh/golib/cmd/CmdMap.Get)
   * [func (self *CmdMap) GetNames() []string](#github.com/billziss-gh/golib/cmd/CmdMap.GetNames)
   * [func (self *CmdMap) PrintCmds()](#github.com/billziss-gh/golib/cmd/CmdMap.PrintCmds)
+  * [func (self *CmdMap) Run(flagSet *flag.FlagSet, args []string)](#github.com/billziss-gh/golib/cmd/CmdMap.Run)
 
 
 ##### <a name="github.com/billziss-gh/golib/cmd/pkg-files">Package files</a>
@@ -148,7 +150,7 @@ DefaultCmdMap is the default command map.
 
 
 
-### <a name="github.com/billziss-gh/golib/cmd/PrintCmds">func</a> [PrintCmds](cmd/cmd.go#L141)
+### <a name="github.com/billziss-gh/golib/cmd/PrintCmds">func</a> [PrintCmds](cmd/cmd.go#L181)
 ``` go
 func PrintCmds()
 ```
@@ -157,16 +159,25 @@ to stderr.
 
 
 
-### <a name="github.com/billziss-gh/golib/cmd/Run">func</a> [Run](cmd/cmd.go#L146)
+### <a name="github.com/billziss-gh/golib/cmd/Run">func</a> [Run](cmd/cmd.go#L187)
 ``` go
 func Run()
 ```
-Run parses the command line and executes the specified (sub-)command.
+Run parses the command line and executes the specified (sub-)command
+from the default command map.
+
+
+
+### <a name="github.com/billziss-gh/golib/cmd/UsageFunc">func</a> [UsageFunc](cmd/cmd.go#L192)
+``` go
+func UsageFunc(args ...interface{}) func()
+```
+UsageFunc returns a usage function appropriate for use with flag.FlagSet.
 
 
 
 
-### <a name="github.com/billziss-gh/golib/cmd/Cmd">type</a> [Cmd](cmd/cmd.go#L33)
+### <a name="github.com/billziss-gh/golib/cmd/Cmd">type</a> [Cmd](cmd/cmd.go#L34)
 ``` go
 type Cmd struct {
     // Flag contains the command flag set.
@@ -190,7 +201,7 @@ Cmd encapsulates a (sub-)command.
 
 
 
-#### <a name="github.com/billziss-gh/golib/cmd/Add">func</a> [Add](cmd/cmd.go#L135)
+#### <a name="github.com/billziss-gh/golib/cmd/Add">func</a> [Add](cmd/cmd.go#L175)
 ``` go
 func Add(name string, main func(*Cmd, []string)) *Cmd
 ```
@@ -210,7 +221,7 @@ Then the command name becomes "NAME", the command Use field becomes
 
 
 
-#### <a name="github.com/billziss-gh/golib/cmd/Cmd.GetFlag">func</a> (\*Cmd) [GetFlag](cmd/cmd.go#L113)
+#### <a name="github.com/billziss-gh/golib/cmd/Cmd.GetFlag">func</a> (\*Cmd) [GetFlag](cmd/cmd.go#L153)
 ``` go
 func (self *Cmd) GetFlag(name string) interface{}
 ```
@@ -219,7 +230,7 @@ GetFlag gets the value of the named flag.
 
 
 
-### <a name="github.com/billziss-gh/golib/cmd/CmdMap">type</a> [CmdMap](cmd/cmd.go#L26)
+### <a name="github.com/billziss-gh/golib/cmd/CmdMap">type</a> [CmdMap](cmd/cmd.go#L27)
 ``` go
 type CmdMap struct {
     // contains filtered or unexported fields
@@ -233,7 +244,7 @@ CmdMap encapsulates a (sub-)command map.
 
 
 
-#### <a name="github.com/billziss-gh/golib/cmd/NewCmdMap">func</a> [NewCmdMap](cmd/cmd.go#L106)
+#### <a name="github.com/billziss-gh/golib/cmd/NewCmdMap">func</a> [NewCmdMap](cmd/cmd.go#L146)
 ``` go
 func NewCmdMap() *CmdMap
 ```
@@ -243,7 +254,7 @@ NewCmdMap creates a new command map.
 
 
 
-#### <a name="github.com/billziss-gh/golib/cmd/CmdMap.Add">func</a> (\*CmdMap) [Add](cmd/cmd.go#L57)
+#### <a name="github.com/billziss-gh/golib/cmd/CmdMap.Add">func</a> (\*CmdMap) [Add](cmd/cmd.go#L58)
 ``` go
 func (self *CmdMap) Add(name string, main func(*Cmd, []string)) (cmd *Cmd)
 ```
@@ -262,7 +273,7 @@ Then the command name becomes "NAME", the command Use field becomes
 
 
 
-#### <a name="github.com/billziss-gh/golib/cmd/CmdMap.Get">func</a> (\*CmdMap) [Get](cmd/cmd.go#L76)
+#### <a name="github.com/billziss-gh/golib/cmd/CmdMap.Get">func</a> (\*CmdMap) [Get](cmd/cmd.go#L84)
 ``` go
 func (self *CmdMap) Get(name string) *Cmd
 ```
@@ -271,7 +282,7 @@ Get gets a command by name.
 
 
 
-#### <a name="github.com/billziss-gh/golib/cmd/CmdMap.GetNames">func</a> (\*CmdMap) [GetNames](cmd/cmd.go#L83)
+#### <a name="github.com/billziss-gh/golib/cmd/CmdMap.GetNames">func</a> (\*CmdMap) [GetNames](cmd/cmd.go#L91)
 ``` go
 func (self *CmdMap) GetNames() []string
 ```
@@ -280,11 +291,20 @@ GetNames gets all command names.
 
 
 
-#### <a name="github.com/billziss-gh/golib/cmd/CmdMap.PrintCmds">func</a> (\*CmdMap) [PrintCmds](cmd/cmd.go#L92)
+#### <a name="github.com/billziss-gh/golib/cmd/CmdMap.PrintCmds">func</a> (\*CmdMap) [PrintCmds](cmd/cmd.go#L100)
 ``` go
 func (self *CmdMap) PrintCmds()
 ```
 PrintCmds prints help text for all commands to stderr.
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/cmd/CmdMap.Run">func</a> (\*CmdMap) [Run](cmd/cmd.go#L114)
+``` go
+func (self *CmdMap) Run(flagSet *flag.FlagSet, args []string)
+```
+Run parses the command line and executes the specified (sub-)command.
 
 
 

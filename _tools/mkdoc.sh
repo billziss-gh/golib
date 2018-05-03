@@ -13,9 +13,9 @@ cd $(dirname "$0")/..
         t=${t//[^\/]}
         i=""
         for ((n=0; n < ${#t}; n++)) {
-            i="$i    "
+            i="$i  "
         }
-        echo "$i- [$(basename $p)](#$p) - $d"
+        echo "$i* [$(basename $p)](#$p) - $d"
     done
     go list ./... |
     while read p; do

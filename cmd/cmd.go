@@ -18,6 +18,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 	"sync"
 )
@@ -61,8 +62,15 @@ func (self *CmdMap) Add(name string, main func(*Cmd, []string)) (cmd *Cmd) {
 	if 2 == len(lines) {
 		desc = lines[1]
 	}
-	name = strings.SplitN(use, " ", 2)[0]
+	parts := strings.SplitN(use, " ", 2)
+	parts[0] = strings.Replace(parts[0], ".", " ", -1)
+	name = parts[0]
+	if i := strings.LastIndex(parts[0], " "); -1 != i {
+		name = name[i+1:]
+	}
+	use = strings.Join(parts, " ")
 	cmd = &Cmd{Flag: flag.NewFlagSet(name, flag.ExitOnError), Main: main, Use: use, Desc: desc}
+	cmd.Flag.Usage = UsageFunc(cmd)
 
 	self.mux.Lock()
 	defer self.mux.Unlock()
@@ -100,6 +108,38 @@ func (self *CmdMap) PrintCmds() {
 			fmt.Fprintln(os.Stderr, "    \t"+cmd.Desc)
 		}
 	}
+}
+
+// Run parses the command line and executes the specified (sub-)command.
+func (self *CmdMap) Run(flagSet *flag.FlagSet, args []string) {
+	if !flagSet.Parsed() {
+		flagSet.Parse(args)
+	}
+
+	arg := flagSet.Arg(0)
+	cmd := self.Get(arg)
+
+	if nil == cmd {
+		if "help" == arg {
+			args = flagSet.Args()[1:]
+			if 0 == len(args) {
+				flagSet.Usage()
+			} else {
+				for _, name := range args {
+					cmd := self.Get(name)
+					if nil == cmd {
+						continue
+					}
+					cmd.Flag.Usage()
+				}
+			}
+		} else {
+			flagSet.Usage()
+		}
+		os.Exit(2)
+	}
+
+	cmd.Main(cmd, flagSet.Args()[1:])
 }
 
 // NewCmdMap creates a new command map.
@@ -142,38 +182,85 @@ func PrintCmds() {
 	DefaultCmdMap.PrintCmds()
 }
 
-// Run parses the command line and executes the specified (sub-)command.
+// Run parses the command line and executes the specified (sub-)command
+// from the default command map.
 func Run() {
-	if !flag.Parsed() {
-		flag.Parse()
-	}
-
-	arg := flag.Arg(0)
-	cmd := DefaultCmdMap.Get(arg)
-
-	if nil == cmd {
-		flag.Usage()
-		os.Exit(2)
-	}
-
-	cmd.Main(cmd, flag.Args()[1:])
+	DefaultCmdMap.Run(flag.CommandLine, os.Args[1:])
 }
 
-func help(cmd *Cmd, args []string) {
+// UsageFunc returns a usage function appropriate for use with flag.FlagSet.
+func UsageFunc(args ...interface{}) func() {
+	var (
+		cmdmap  *CmdMap
+		use     string
+		flagSet *flag.FlagSet
+	)
+
 	if 0 == len(args) {
-		flag.Usage()
+		cmdmap = DefaultCmdMap
+		flagSet = flag.CommandLine
 	} else {
-		for _, name := range args {
-			cmd := DefaultCmdMap.Get(name)
-			if nil == cmd {
-				continue
+		for _, arg := range args {
+			switch a := arg.(type) {
+			case *Cmd:
+				use = a.Use
+				flagSet = a.Flag
+			case *CmdMap:
+				cmdmap = a
+			case string:
+				use = a
+			case *flag.FlagSet:
+				flagSet = a
 			}
-			cmd.Flag.Usage()
 		}
 	}
-	os.Exit(2)
-}
 
-func init() {
-	Add("help", help)
+	return func() {
+		progname := filepath.Base(os.Args[0])
+		cmdCount := 0
+		if nil != cmdmap {
+			cmdCount = len(cmdmap.GetNames())
+		}
+
+		flagCount := 0
+		if nil != flagSet {
+			flagSet.VisitAll(func(*flag.Flag) {
+				flagCount++
+			})
+		}
+
+		switch {
+		case 0 == cmdCount && 0 == flagCount:
+			if "" == use {
+				fmt.Fprintf(os.Stderr, "usage: %s\n", progname)
+			} else {
+				fmt.Fprintf(os.Stderr, "usage: %s %s\n", progname, use)
+			}
+		case 0 != cmdCount && 0 == flagCount:
+			if "" == use {
+				use = "command args..."
+			}
+			fmt.Fprintf(os.Stderr, "usage: %s %s\n", progname, use)
+			fmt.Fprintln(os.Stderr)
+			fmt.Fprintln(os.Stderr, "commands:")
+			cmdmap.PrintCmds()
+		case 0 == cmdCount && 0 != flagCount:
+			if "" == use {
+				use = "[-options] args..."
+			}
+			fmt.Fprintf(os.Stderr, "usage: %s %s\n", progname, use)
+			flagSet.PrintDefaults()
+		default:
+			if "" == use {
+				use = "[-options] command args..."
+			}
+			fmt.Fprintf(os.Stderr, "usage: %s %s\n", progname, use)
+			fmt.Fprintln(os.Stderr)
+			fmt.Fprintln(os.Stderr, "commands:")
+			cmdmap.PrintCmds()
+			fmt.Fprintln(os.Stderr)
+			fmt.Fprintln(os.Stderr, "options:")
+			flagSet.PrintDefaults()
+		}
+	}
 }
