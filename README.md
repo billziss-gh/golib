@@ -335,6 +335,9 @@ Properties not in a section are placed in the unnamed (empty "") section.
 * [func WriteTyped(writer io.Writer, conf TypedConfig) error](#github.com/billziss-gh/golib/config/WriteTyped)
 * [type Config](#github.com/billziss-gh/golib/config/Config)
   * [func Read(reader io.Reader) (Config, error)](#github.com/billziss-gh/golib/config/Read)
+  * [func (conf Config) Delete(k string)](#github.com/billziss-gh/golib/config/Config.Delete)
+  * [func (conf Config) Get(k string) string](#github.com/billziss-gh/golib/config/Config.Get)
+  * [func (conf Config) Set(k string, v string)](#github.com/billziss-gh/golib/config/Config.Set)
 * [type Dialect](#github.com/billziss-gh/golib/config/Dialect)
   * [func (dialect *Dialect) Read(reader io.Reader) (Config, error)](#github.com/billziss-gh/golib/config/Dialect.Read)
   * [func (dialect *Dialect) ReadFunc(reader io.Reader, fn func(sect, name string, valu interface{})) error](#github.com/billziss-gh/golib/config/Dialect.ReadFunc)
@@ -344,6 +347,9 @@ Properties not in a section are placed in the unnamed (empty "") section.
 * [type Section](#github.com/billziss-gh/golib/config/Section)
 * [type TypedConfig](#github.com/billziss-gh/golib/config/TypedConfig)
   * [func ReadTyped(reader io.Reader) (TypedConfig, error)](#github.com/billziss-gh/golib/config/ReadTyped)
+  * [func (conf TypedConfig) Delete(k string)](#github.com/billziss-gh/golib/config/TypedConfig.Delete)
+  * [func (conf TypedConfig) Get(k string) interface{}](#github.com/billziss-gh/golib/config/TypedConfig.Get)
+  * [func (conf TypedConfig) Set(k string, v interface{})](#github.com/billziss-gh/golib/config/TypedConfig.Set)
 * [type TypedSection](#github.com/billziss-gh/golib/config/TypedSection)
 
 
@@ -367,14 +373,14 @@ It is compatible with Windows INI files.
 
 
 
-### <a name="github.com/billziss-gh/golib/config/ReadFunc">func</a> [ReadFunc](config/config.go#L424)
+### <a name="github.com/billziss-gh/golib/config/ReadFunc">func</a> [ReadFunc](config/config.go#L522)
 ``` go
 func ReadFunc(
     reader io.Reader, fn func(sect, name string, valu interface{})) error
 ```
 
 
-### <a name="github.com/billziss-gh/golib/config/Write">func</a> [Write](config/config.go#L443)
+### <a name="github.com/billziss-gh/golib/config/Write">func</a> [Write](config/config.go#L541)
 ``` go
 func Write(writer io.Writer, conf Config) error
 ```
@@ -383,7 +389,7 @@ using the default dialect.
 
 
 
-### <a name="github.com/billziss-gh/golib/config/WriteTyped">func</a> [WriteTyped](config/config.go#L449)
+### <a name="github.com/billziss-gh/golib/config/WriteTyped">func</a> [WriteTyped](config/config.go#L547)
 ``` go
 func WriteTyped(writer io.Writer, conf TypedConfig) error
 ```
@@ -393,19 +399,22 @@ using the default dialect.
 
 
 
-### <a name="github.com/billziss-gh/golib/config/Config">type</a> [Config](config/config.go#L49)
+### <a name="github.com/billziss-gh/golib/config/Config">type</a> [Config](config/config.go#L52)
 ``` go
 type Config map[string]Section
 ```
 Config is used to store a configuration as string properties.
 
+When using Get, Set, Delete to manipulate properties the property names
+follow the syntax SECTION.PROPNAME
 
 
 
 
 
 
-#### <a name="github.com/billziss-gh/golib/config/Read">func</a> [Read](config/config.go#L431)
+
+#### <a name="github.com/billziss-gh/golib/config/Read">func</a> [Read](config/config.go#L529)
 ``` go
 func Read(reader io.Reader) (Config, error)
 ```
@@ -416,7 +425,34 @@ using the default dialect.
 
 
 
-### <a name="github.com/billziss-gh/golib/config/Dialect">type</a> [Dialect](config/config.go#L59)
+#### <a name="github.com/billziss-gh/golib/config/Config.Delete">func</a> (Config) [Delete](config/config.go#L94)
+``` go
+func (conf Config) Delete(k string)
+```
+Delete deletes a property from the configuration.
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/config/Config.Get">func</a> (Config) [Get](config/config.go#L65)
+``` go
+func (conf Config) Get(k string) string
+```
+Get gets a property from the configuration.
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/config/Config.Set">func</a> (Config) [Set](config/config.go#L79)
+``` go
+func (conf Config) Set(k string, v string)
+```
+Set sets a property in the configuration.
+
+
+
+
+### <a name="github.com/billziss-gh/golib/config/Dialect">type</a> [Dialect](config/config.go#L157)
 ``` go
 type Dialect struct {
     // AssignChars contains the characters used for property assignment.
@@ -452,7 +488,7 @@ Dialect is used to represent different dialects of configuration files.
 
 
 
-#### <a name="github.com/billziss-gh/golib/config/Dialect.Read">func</a> (\*Dialect) [Read](config/config.go#L169)
+#### <a name="github.com/billziss-gh/golib/config/Dialect.Read">func</a> (\*Dialect) [Read](config/config.go#L267)
 ``` go
 func (dialect *Dialect) Read(reader io.Reader) (Config, error)
 ```
@@ -461,7 +497,7 @@ Read reads a configuration from the supplied reader.
 
 
 
-#### <a name="github.com/billziss-gh/golib/config/Dialect.ReadFunc">func</a> (\*Dialect) [ReadFunc](config/config.go#L92)
+#### <a name="github.com/billziss-gh/golib/config/Dialect.ReadFunc">func</a> (\*Dialect) [ReadFunc](config/config.go#L190)
 ``` go
 func (dialect *Dialect) ReadFunc(
     reader io.Reader, fn func(sect, name string, valu interface{})) error
@@ -469,7 +505,7 @@ func (dialect *Dialect) ReadFunc(
 
 
 
-#### <a name="github.com/billziss-gh/golib/config/Dialect.ReadTyped">func</a> (\*Dialect) [ReadTyped](config/config.go#L193)
+#### <a name="github.com/billziss-gh/golib/config/Dialect.ReadTyped">func</a> (\*Dialect) [ReadTyped](config/config.go#L291)
 ``` go
 func (dialect *Dialect) ReadTyped(reader io.Reader) (TypedConfig, error)
 ```
@@ -478,7 +514,7 @@ ReadTyped reads a typed configuration from the supplied reader.
 
 
 
-#### <a name="github.com/billziss-gh/golib/config/Dialect.Write">func</a> (\*Dialect) [Write](config/config.go#L239)
+#### <a name="github.com/billziss-gh/golib/config/Dialect.Write">func</a> (\*Dialect) [Write](config/config.go#L337)
 ``` go
 func (dialect *Dialect) Write(writer io.Writer, conf Config) error
 ```
@@ -487,7 +523,7 @@ Write writes a configuration to the supplied writer.
 
 
 
-#### <a name="github.com/billziss-gh/golib/config/Dialect.WriteTyped">func</a> (\*Dialect) [WriteTyped](config/config.go#L280)
+#### <a name="github.com/billziss-gh/golib/config/Dialect.WriteTyped">func</a> (\*Dialect) [WriteTyped](config/config.go#L378)
 ``` go
 func (dialect *Dialect) WriteTyped(writer io.Writer, conf TypedConfig) error
 ```
@@ -511,19 +547,22 @@ Section is used to store a configuration section as string properties.
 
 
 
-### <a name="github.com/billziss-gh/golib/config/TypedConfig">type</a> [TypedConfig](config/config.go#L55)
+### <a name="github.com/billziss-gh/golib/config/TypedConfig">type</a> [TypedConfig](config/config.go#L61)
 ``` go
 type TypedConfig map[string]TypedSection
 ```
 TypedConfig is used to store a configuration as typed properties.
 
+When using Get, Set, Delete to manipulate properties the property names
+follow the syntax SECTION.PROPNAME
 
 
 
 
 
 
-#### <a name="github.com/billziss-gh/golib/config/ReadTyped">func</a> [ReadTyped](config/config.go#L437)
+
+#### <a name="github.com/billziss-gh/golib/config/ReadTyped">func</a> [ReadTyped](config/config.go#L535)
 ``` go
 func ReadTyped(reader io.Reader) (TypedConfig, error)
 ```
@@ -534,7 +573,34 @@ using the default dialect.
 
 
 
-### <a name="github.com/billziss-gh/golib/config/TypedSection">type</a> [TypedSection](config/config.go#L52)
+#### <a name="github.com/billziss-gh/golib/config/TypedConfig.Delete">func</a> (TypedConfig) [Delete](config/config.go#L140)
+``` go
+func (conf TypedConfig) Delete(k string)
+```
+Delete deletes a property from the configuration.
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/config/TypedConfig.Get">func</a> (TypedConfig) [Get](config/config.go#L111)
+``` go
+func (conf TypedConfig) Get(k string) interface{}
+```
+Get gets a property from the configuration.
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/config/TypedConfig.Set">func</a> (TypedConfig) [Set](config/config.go#L125)
+``` go
+func (conf TypedConfig) Set(k string, v interface{})
+```
+Set sets a property in the configuration.
+
+
+
+
+### <a name="github.com/billziss-gh/golib/config/TypedSection">type</a> [TypedSection](config/config.go#L55)
 ``` go
 type TypedSection map[string]interface{}
 ```

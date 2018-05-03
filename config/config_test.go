@@ -114,6 +114,50 @@ func TestConfig(t *testing.T) {
 	testConfig(t, dialect)
 }
 
+func TestGetSetDelete(t *testing.T) {
+	conf := Config{}
+
+	conf.Set("hello", "world")
+	conf.Set("section.hello", "world")
+	conf.Set("section.k", "v")
+	conf.Set("section2.hello", "world")
+
+	if "world" != conf[""]["hello"] {
+		t.Error()
+	}
+	if "world" != conf["section"]["hello"] {
+		t.Error()
+	}
+	if "v" != conf["section"]["k"] {
+		t.Error()
+	}
+	if "world" != conf["section2"]["hello"] {
+		t.Error()
+	}
+
+	if "world" != conf.Get("hello") {
+		t.Error()
+	}
+	if "world" != conf.Get("section.hello") {
+		t.Error()
+	}
+	if "v" != conf.Get("section.k") {
+		t.Error()
+	}
+	if "world" != conf.Get("section2.hello") {
+		t.Error()
+	}
+
+	conf.Delete("hello")
+	conf.Delete("section.hello")
+	conf.Delete("section.k")
+	conf.Delete("section2.hello")
+
+	if 0 != len(conf) {
+		t.Error()
+	}
+}
+
 func testTypedConfig(t *testing.T, dialect *Dialect) {
 	f, err := ioutil.TempFile("", "config")
 	if nil != err {
@@ -173,4 +217,48 @@ func TestTypedConfig(t *testing.T) {
 		Strict:         false,
 	}
 	testTypedConfig(t, dialect)
+}
+
+func TestTypedGetSetDelete(t *testing.T) {
+	conf := TypedConfig{}
+
+	conf.Set("hello", "world")
+	conf.Set("section.hello", "world")
+	conf.Set("section.k", "v")
+	conf.Set("section2.hello", "world")
+
+	if "world" != conf[""]["hello"] {
+		t.Error()
+	}
+	if "world" != conf["section"]["hello"] {
+		t.Error()
+	}
+	if "v" != conf["section"]["k"] {
+		t.Error()
+	}
+	if "world" != conf["section2"]["hello"] {
+		t.Error()
+	}
+
+	if "world" != conf.Get("hello") {
+		t.Error()
+	}
+	if "world" != conf.Get("section.hello") {
+		t.Error()
+	}
+	if "v" != conf.Get("section.k") {
+		t.Error()
+	}
+	if "world" != conf.Get("section2.hello") {
+		t.Error()
+	}
+
+	conf.Delete("hello")
+	conf.Delete("section.hello")
+	conf.Delete("section.k")
+	conf.Delete("section2.hello")
+
+	if 0 != len(conf) {
+		t.Error()
+	}
 }

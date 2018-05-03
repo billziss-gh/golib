@@ -46,14 +46,112 @@ type (
 	Section map[string]string
 
 	// Config is used to store a configuration as string properties.
+	//
+	// When using Get, Set, Delete to manipulate properties the property names
+	// follow the syntax SECTION.PROPNAME
 	Config map[string]Section
 
 	// TypedSection is used to store a configuration section as typed properties.
 	TypedSection map[string]interface{}
 
 	// TypedConfig is used to store a configuration as typed properties.
+	//
+	// When using Get, Set, Delete to manipulate properties the property names
+	// follow the syntax SECTION.PROPNAME
 	TypedConfig map[string]TypedSection
 )
+
+// Get gets a property from the configuration.
+func (conf Config) Get(k string) string {
+	s := ""
+	if i := strings.LastIndex(k, "."); -1 != i {
+		s = k[:i]
+		k = k[i+1:]
+	}
+	sect, ok := conf[s]
+	if !ok {
+		return ""
+	}
+	return sect[k]
+}
+
+// Set sets a property in the configuration.
+func (conf Config) Set(k string, v string) {
+	s := ""
+	if i := strings.LastIndex(k, "."); -1 != i {
+		s = k[:i]
+		k = k[i+1:]
+	}
+	sect, ok := conf[s]
+	if !ok {
+		sect = Section{}
+		conf[s] = sect
+	}
+	sect[k] = v
+}
+
+// Delete deletes a property from the configuration.
+func (conf Config) Delete(k string) {
+	s := ""
+	if i := strings.LastIndex(k, "."); -1 != i {
+		s = k[:i]
+		k = k[i+1:]
+	}
+	sect, ok := conf[s]
+	if !ok {
+		return
+	}
+	delete(sect, k)
+	if 0 == len(sect) {
+		delete(conf, s)
+	}
+}
+
+// Get gets a property from the configuration.
+func (conf TypedConfig) Get(k string) interface{} {
+	s := ""
+	if i := strings.LastIndex(k, "."); -1 != i {
+		s = k[:i]
+		k = k[i+1:]
+	}
+	sect, ok := conf[s]
+	if !ok {
+		return ""
+	}
+	return sect[k]
+}
+
+// Set sets a property in the configuration.
+func (conf TypedConfig) Set(k string, v interface{}) {
+	s := ""
+	if i := strings.LastIndex(k, "."); -1 != i {
+		s = k[:i]
+		k = k[i+1:]
+	}
+	sect, ok := conf[s]
+	if !ok {
+		sect = TypedSection{}
+		conf[s] = sect
+	}
+	sect[k] = v
+}
+
+// Delete deletes a property from the configuration.
+func (conf TypedConfig) Delete(k string) {
+	s := ""
+	if i := strings.LastIndex(k, "."); -1 != i {
+		s = k[:i]
+		k = k[i+1:]
+	}
+	sect, ok := conf[s]
+	if !ok {
+		return
+	}
+	delete(sect, k)
+	if 0 == len(sect) {
+		delete(conf, s)
+	}
+}
 
 // Dialect is used to represent different dialects of configuration files.
 type Dialect struct {
