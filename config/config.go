@@ -116,7 +116,7 @@ func (conf TypedConfig) Get(k string) interface{} {
 	}
 	sect, ok := conf[s]
 	if !ok {
-		return ""
+		return nil
 	}
 	return sect[k]
 }
