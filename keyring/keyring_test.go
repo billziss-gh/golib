@@ -167,3 +167,18 @@ func TestSecureFileKeyring(t *testing.T) {
 	defer os.Remove(path)
 	testKeyringInstance(t, &FileKeyring{Path: path, Key: []byte("passpasspasspass")})
 }
+
+func TestOverlayKeyring(t *testing.T) {
+	path1 := filepath.Join(os.TempDir(), "keyring_test1")
+	os.Remove(path1)
+	defer os.Remove(path1)
+
+	path2 := filepath.Join(os.TempDir(), "keyring_test2")
+	os.Remove(path2)
+	defer os.Remove(path2)
+
+	ring1 := &FileKeyring{Path: path1}
+	ring2 := &FileKeyring{Path: path2}
+
+	testKeyringInstance(t, &OverlayKeyring{Keyrings: []Keyring{ring1, ring2}})
+}
