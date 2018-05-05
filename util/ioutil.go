@@ -18,6 +18,7 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 )
 
 func ReadFunc(path string, fn func(*os.File) (interface{}, error)) (data interface{}, err error) {
@@ -48,6 +49,22 @@ func ReadData(path string) (data []byte, err error) {
 func WriteFunc(path string, perm os.FileMode, fn func(*os.File) error) (err error) {
 	var r [10]byte
 	_, err = rand.Read(r[:])
+	if nil != err {
+		return
+	}
+
+	dirperm := os.FileMode(0)
+	if 0 != perm&0700 {
+		dirperm |= (perm & 0600) | 0100
+	}
+	if 0 != perm&0070 {
+		dirperm |= (perm & 0040) | 0010
+	}
+	if 0 != perm&0007 {
+		dirperm |= (perm & 0004) | 0001
+	}
+
+	err = os.MkdirAll(filepath.Dir(path), dirperm)
 	if nil != err {
 		return
 	}
