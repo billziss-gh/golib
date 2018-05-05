@@ -814,6 +814,10 @@ Windows, Secret Service on Linux).
   * [func (self *FileKeyring) Get(service, user string) (string, error)](#github.com/billziss-gh/golib/keyring/FileKeyring.Get)
   * [func (self *FileKeyring) Set(service, user, pass string) error](#github.com/billziss-gh/golib/keyring/FileKeyring.Set)
 * [type Keyring](#github.com/billziss-gh/golib/keyring/Keyring)
+* [type OverlayKeyring](#github.com/billziss-gh/golib/keyring/OverlayKeyring)
+  * [func (self *OverlayKeyring) Delete(service, user string) error](#github.com/billziss-gh/golib/keyring/OverlayKeyring.Delete)
+  * [func (self *OverlayKeyring) Get(service, user string) (string, error)](#github.com/billziss-gh/golib/keyring/OverlayKeyring.Get)
+  * [func (self *OverlayKeyring) Set(service, user, pass string) error](#github.com/billziss-gh/golib/keyring/OverlayKeyring.Set)
 * [type SystemKeyring](#github.com/billziss-gh/golib/keyring/SystemKeyring)
   * [func (self *SystemKeyring) Delete(service, user string) error](#github.com/billziss-gh/golib/keyring/SystemKeyring.Delete)
   * [func (self *SystemKeyring) Get(service, user string) (string, error)](#github.com/billziss-gh/golib/keyring/SystemKeyring.Get)
@@ -821,7 +825,7 @@ Windows, Secret Service on Linux).
 
 
 ##### <a name="github.com/billziss-gh/golib/keyring/pkg-files">Package files</a>
-[keyring_darwin.go](keyring/keyring_darwin.go) [keyring_default.go](keyring/keyring_default.go) [keyring_file.go](keyring/keyring_file.go) 
+[keyring_darwin.go](keyring/keyring_darwin.go) [keyring_default.go](keyring/keyring_default.go) [keyring_file.go](keyring/keyring_file.go) [keyring_overlay.go](keyring/keyring_overlay.go) 
 
 
 ### <a name="github.com/billziss-gh/golib/keyring/pkg-constants">Constants</a>
@@ -924,6 +928,45 @@ The default keyring.
 
 
 
+
+
+
+### <a name="github.com/billziss-gh/golib/keyring/OverlayKeyring">type</a> [OverlayKeyring](keyring/keyring_overlay.go#L23)
+``` go
+type OverlayKeyring struct {
+    Keyrings []Keyring
+    // contains filtered or unexported fields
+}
+```
+OverlayKeyring is a keyring that stores passwords in a hierarchy of keyrings.
+
+
+
+
+
+
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/keyring/OverlayKeyring.Delete">func</a> (\*OverlayKeyring) [Delete](keyring/keyring_overlay.go#L53)
+``` go
+func (self *OverlayKeyring) Delete(service, user string) error
+```
+
+
+
+#### <a name="github.com/billziss-gh/golib/keyring/OverlayKeyring.Get">func</a> (\*OverlayKeyring) [Get](keyring/keyring_overlay.go#L28)
+``` go
+func (self *OverlayKeyring) Get(service, user string) (string, error)
+```
+
+
+
+#### <a name="github.com/billziss-gh/golib/keyring/OverlayKeyring.Set">func</a> (\*OverlayKeyring) [Set](keyring/keyring_overlay.go#L42)
+``` go
+func (self *OverlayKeyring) Set(service, user, pass string) error
+```
 
 
 
@@ -1278,13 +1321,13 @@ func ReadAeData(path string, key []byte) (data []byte, err error)
 ```
 
 
-### <a name="github.com/billziss-gh/golib/util/ReadData">func</a> [ReadData](util/ioutil.go#L36)
+### <a name="github.com/billziss-gh/golib/util/ReadData">func</a> [ReadData](util/ioutil.go#L37)
 ``` go
 func ReadData(path string) (data []byte, err error)
 ```
 
 
-### <a name="github.com/billziss-gh/golib/util/ReadFunc">func</a> [ReadFunc](util/ioutil.go#L23)
+### <a name="github.com/billziss-gh/golib/util/ReadFunc">func</a> [ReadFunc](util/ioutil.go#L24)
 ``` go
 func ReadFunc(path string, fn func(*os.File) (interface{}, error)) (data interface{}, err error)
 ```
@@ -1296,13 +1339,13 @@ func WriteAeData(path string, perm os.FileMode, data []byte, key []byte) (err er
 ```
 
 
-### <a name="github.com/billziss-gh/golib/util/WriteData">func</a> [WriteData](util/ioutil.go#L74)
+### <a name="github.com/billziss-gh/golib/util/WriteData">func</a> [WriteData](util/ioutil.go#L91)
 ``` go
 func WriteData(path string, perm os.FileMode, data []byte) (err error)
 ```
 
 
-### <a name="github.com/billziss-gh/golib/util/WriteFunc">func</a> [WriteFunc](util/ioutil.go#L48)
+### <a name="github.com/billziss-gh/golib/util/WriteFunc">func</a> [WriteFunc](util/ioutil.go#L49)
 ``` go
 func WriteFunc(path string, perm os.FileMode, fn func(*os.File) error) (err error)
 ```
