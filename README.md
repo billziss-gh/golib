@@ -1122,6 +1122,7 @@ Package terminal provides functionality for terminals.
 * [Variables](#github.com/billziss-gh/golib/terminal/pkg-variables)
 * [func AnsiEscapeCode(code string) string](#github.com/billziss-gh/golib/terminal/AnsiEscapeCode)
 * [func Escape(s string, delims string, escape func(string) string) string](#github.com/billziss-gh/golib/terminal/Escape)
+* [func GetSize(fd uintptr) (int, int, error)](#github.com/billziss-gh/golib/terminal/GetSize)
 * [func IsAnsiTerminal(fd uintptr) bool](#github.com/billziss-gh/golib/terminal/IsAnsiTerminal)
 * [func IsTerminal(fd uintptr) bool](#github.com/billziss-gh/golib/terminal/IsTerminal)
 * [func NewEscapeWriter(writer io.Writer, delims string, escape func(string) string) io.Writer](#github.com/billziss-gh/golib/terminal/NewEscapeWriter)
@@ -1167,6 +1168,14 @@ specify "{{ }}".
 For consistency with NewEscapeWriter, Escape will discard an unterminated escape
 code. For example, if delims is "{{ }}" and the string s is "hello {{world",
 the resulting string will be "hello ".
+
+
+
+### <a name="github.com/billziss-gh/golib/terminal/GetSize">func</a> [GetSize](terminal/terminal.go#L46)
+``` go
+func GetSize(fd uintptr) (int, int, error)
+```
+GetSize gets the terminal size (cols x rows).
 
 
 
@@ -1311,7 +1320,7 @@ DefaultEditor is the default Editor.
 
 
 
-### <a name="github.com/billziss-gh/golib/terminal/editor/Editor">type</a> [Editor](terminal/editor/editor.go#L56)
+### <a name="github.com/billziss-gh/golib/terminal/editor/Editor">type</a> [Editor](terminal/editor/editor.go#L58)
 ``` go
 type Editor struct {
     // contains filtered or unexported fields
@@ -1325,7 +1334,7 @@ Editor is a command line editor with history and completion handling.
 
 
 
-#### <a name="github.com/billziss-gh/golib/terminal/editor/NewEditor">func</a> [NewEditor](terminal/editor/editor.go#L383)
+#### <a name="github.com/billziss-gh/golib/terminal/editor/NewEditor">func</a> [NewEditor](terminal/editor/editor.go#L432)
 ``` go
 func NewEditor(in *os.File, out *os.File) *Editor
 ```
@@ -1335,7 +1344,7 @@ NewEditor creates a new editor.
 
 
 
-#### <a name="github.com/billziss-gh/golib/terminal/editor/Editor.GetLine">func</a> (\*Editor) [GetLine](terminal/editor/editor.go#L355)
+#### <a name="github.com/billziss-gh/golib/terminal/editor/Editor.GetLine">func</a> (\*Editor) [GetLine](terminal/editor/editor.go#L404)
 ``` go
 func (self *Editor) GetLine(prompt string) (string, error)
 ```
@@ -1344,7 +1353,7 @@ GetLine gets a line from the terminal.
 
 
 
-#### <a name="github.com/billziss-gh/golib/terminal/editor/Editor.GetPass">func</a> (\*Editor) [GetPass](terminal/editor/editor.go#L364)
+#### <a name="github.com/billziss-gh/golib/terminal/editor/Editor.GetPass">func</a> (\*Editor) [GetPass](terminal/editor/editor.go#L413)
 ``` go
 func (self *Editor) GetPass(prompt string) (string, error)
 ```
@@ -1353,7 +1362,7 @@ GetPass gets a password from the terminal.
 
 
 
-#### <a name="github.com/billziss-gh/golib/terminal/editor/Editor.History">func</a> (\*Editor) [History](terminal/editor/editor.go#L378)
+#### <a name="github.com/billziss-gh/golib/terminal/editor/Editor.History">func</a> (\*Editor) [History](terminal/editor/editor.go#L427)
 ``` go
 func (self *Editor) History() *History
 ```
@@ -1362,7 +1371,7 @@ History returns the editor's command line history.
 
 
 
-#### <a name="github.com/billziss-gh/golib/terminal/editor/Editor.SetCompletionHandler">func</a> (\*Editor) [SetCompletionHandler](terminal/editor/editor.go#L373)
+#### <a name="github.com/billziss-gh/golib/terminal/editor/Editor.SetCompletionHandler">func</a> (\*Editor) [SetCompletionHandler](terminal/editor/editor.go#L422)
 ``` go
 func (self *Editor) SetCompletionHandler(handler func(line string) []string)
 ```
