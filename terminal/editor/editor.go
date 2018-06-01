@@ -380,6 +380,10 @@ func (self *Editor) rawGetLine(echo bool, prompt string) (string, error) {
 				}
 			}
 		case _CtrlC: // interrupt
+			runes = []rune{'^', 'C'}
+			pos = len(runes)
+			self.redisplay(echo, runes, pos, &state)
+			return "", io.ErrUnexpectedEOF
 		default:
 			if ' ' <= r {
 				runes = append(runes, 0)
