@@ -1,5 +1,5 @@
 /*
- * terminal_darwin.go
+ * reader.go
  *
  * Copyright 2018 Bill Zissimopoulos
  */
@@ -12,9 +12,11 @@
 
 package terminal
 
-import "syscall"
-
-const (
-	tcgetattr = syscall.TIOCGETA
-	tcsetattr = syscall.TIOCSETA
+import (
+	"io"
 )
+
+// NewReader reads terminal input, including special keys.
+func NewReader(r io.Reader) io.Reader {
+	return newReader(r)
+}

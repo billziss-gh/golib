@@ -1,5 +1,7 @@
+// +build darwin linux
+
 /*
- * terminal_darwin.go
+ * reader_unix.go
  *
  * Copyright 2018 Bill Zissimopoulos
  */
@@ -12,9 +14,8 @@
 
 package terminal
 
-import "syscall"
+import "io"
 
-const (
-	tcgetattr = syscall.TIOCGETA
-	tcsetattr = syscall.TIOCSETA
-)
+func newReader(r io.Reader) io.Reader {
+	return r
+}

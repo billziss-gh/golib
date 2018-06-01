@@ -9,6 +9,7 @@
 * [keyring](#github.com/billziss-gh/golib/keyring) - Package keyring implements functions for accessing and storing passwords in the system's keyring (Keychain on macOS, Credential Manager on Windows, Secret Service on Linux).
 * [retry](#github.com/billziss-gh/golib/retry) - Package retry implements simple retry functionality.
 * [terminal](#github.com/billziss-gh/golib/terminal) - Package terminal provides functionality for terminals.
+  * [editor](#github.com/billziss-gh/golib/terminal/editor) - Package editor provides simple readline functionality for Go programs.
 * [trace](#github.com/billziss-gh/golib/trace) - Package trace provides a simple tracing facility for Go functions.
 * [util](#github.com/billziss-gh/golib/util) - Package util contains general utility functions.
 
@@ -1124,11 +1125,16 @@ Package terminal provides functionality for terminals.
 * [func IsAnsiTerminal(fd uintptr) bool](#github.com/billziss-gh/golib/terminal/IsAnsiTerminal)
 * [func IsTerminal(fd uintptr) bool](#github.com/billziss-gh/golib/terminal/IsTerminal)
 * [func NewEscapeWriter(writer io.Writer, delims string, escape func(string) string) io.Writer](#github.com/billziss-gh/golib/terminal/NewEscapeWriter)
+* [func NewReader(r io.Reader) io.Reader](#github.com/billziss-gh/golib/terminal/NewReader)
 * [func NullEscapeCode(code string) string](#github.com/billziss-gh/golib/terminal/NullEscapeCode)
+* [func SetState(fd uintptr, s State) error](#github.com/billziss-gh/golib/terminal/SetState)
+* [type State](#github.com/billziss-gh/golib/terminal/State)
+  * [func GetState(fd uintptr) (State, error)](#github.com/billziss-gh/golib/terminal/GetState)
+  * [func MakeRaw(fd uintptr) (State, error)](#github.com/billziss-gh/golib/terminal/MakeRaw)
 
 
 ##### <a name="github.com/billziss-gh/golib/terminal/pkg-files">Package files</a>
-[codes.go](terminal/codes.go) [escape.go](terminal/escape.go) [stdio.go](terminal/stdio.go) [terminal.go](terminal/terminal.go) [terminal_darwin.go](terminal/terminal_darwin.go) 
+[codes.go](terminal/codes.go) [escape.go](terminal/escape.go) [reader.go](terminal/reader.go) [reader_unix.go](terminal/reader_unix.go) [stdio.go](terminal/stdio.go) [terminal.go](terminal/terminal.go) [terminal_darwin.go](terminal/terminal_darwin.go) [terminal_unix.go](terminal/terminal_unix.go) 
 
 
 
@@ -1197,12 +1203,294 @@ the resulting string will be "hello ".
 
 
 
+### <a name="github.com/billziss-gh/golib/terminal/NewReader">func</a> [NewReader](terminal/reader.go#L20)
+``` go
+func NewReader(r io.Reader) io.Reader
+```
+NewReader reads terminal input, including special keys.
+
+
+
 ### <a name="github.com/billziss-gh/golib/terminal/NullEscapeCode">func</a> [NullEscapeCode](terminal/codes.go#L19)
 ``` go
 func NullEscapeCode(code string) string
 ```
 NullEscapeCode translates a named escape code to the empty string.
 It is used to eliminate escape codes.
+
+
+
+### <a name="github.com/billziss-gh/golib/terminal/SetState">func</a> [SetState](terminal/terminal.go#L34)
+``` go
+func SetState(fd uintptr, s State) error
+```
+
+
+
+### <a name="github.com/billziss-gh/golib/terminal/State">type</a> [State](terminal/terminal.go#L27)
+``` go
+type State *state
+```
+
+
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/terminal/GetState">func</a> [GetState](terminal/terminal.go#L29)
+``` go
+func GetState(fd uintptr) (State, error)
+```
+
+#### <a name="github.com/billziss-gh/golib/terminal/MakeRaw">func</a> [MakeRaw](terminal/terminal.go#L40)
+``` go
+func MakeRaw(fd uintptr) (State, error)
+```
+MakeRaw puts the terminal in "raw" mode. In this mode the terminal performs
+minimal processing. The fd should be the file descriptor of the terminal input.
+
+
+
+
+
+
+
+
+
+
+
+
+----
+## <a name="github.com/billziss-gh/golib/terminal/editor">Package editor</a>
+_[[godoc.org](https://godoc.org/github.com/billziss-gh/golib/terminal/editor)]_
+
+`import "github.com/billziss-gh/golib/terminal/editor"`
+
+* [Overview](#github.com/billziss-gh/golib/terminal/editor/pkg-overview)
+* [Index](#github.com/billziss-gh/golib/terminal/editor/pkg-index)
+
+### <a name="github.com/billziss-gh/golib/terminal/editor/pkg-overview">Overview</a>
+Package editor provides simple readline functionality for Go programs.
+
+
+
+
+### <a name="github.com/billziss-gh/golib/terminal/editor/pkg-index">Index</a>
+* [Variables](#github.com/billziss-gh/golib/terminal/editor/pkg-variables)
+* [type Editor](#github.com/billziss-gh/golib/terminal/editor/Editor)
+  * [func NewEditor(in *os.File, out *os.File) *Editor](#github.com/billziss-gh/golib/terminal/editor/NewEditor)
+  * [func (self *Editor) GetLine(prompt string) (string, error)](#github.com/billziss-gh/golib/terminal/editor/Editor.GetLine)
+  * [func (self *Editor) GetPass(prompt string) (string, error)](#github.com/billziss-gh/golib/terminal/editor/Editor.GetPass)
+  * [func (self *Editor) History() *History](#github.com/billziss-gh/golib/terminal/editor/Editor.History)
+  * [func (self *Editor) SetCompletionHandler(handler func(line string) []string)](#github.com/billziss-gh/golib/terminal/editor/Editor.SetCompletionHandler)
+* [type History](#github.com/billziss-gh/golib/terminal/editor/History)
+  * [func NewHistory() *History](#github.com/billziss-gh/golib/terminal/editor/NewHistory)
+  * [func (self *History) Add(line string)](#github.com/billziss-gh/golib/terminal/editor/History.Add)
+  * [func (self *History) Clear()](#github.com/billziss-gh/golib/terminal/editor/History.Clear)
+  * [func (self *History) Delete(id int)](#github.com/billziss-gh/golib/terminal/editor/History.Delete)
+  * [func (self *History) Enum(id int, fn func(id int, line string) bool)](#github.com/billziss-gh/golib/terminal/editor/History.Enum)
+  * [func (self *History) Get(id int, dir int) (int, string)](#github.com/billziss-gh/golib/terminal/editor/History.Get)
+  * [func (self *History) Len() int](#github.com/billziss-gh/golib/terminal/editor/History.Len)
+  * [func (self *History) Read(reader io.Reader) (err error)](#github.com/billziss-gh/golib/terminal/editor/History.Read)
+  * [func (self *History) Reset()](#github.com/billziss-gh/golib/terminal/editor/History.Reset)
+  * [func (self *History) SetCap(cap int)](#github.com/billziss-gh/golib/terminal/editor/History.SetCap)
+  * [func (self *History) Write(writer io.Writer) (err error)](#github.com/billziss-gh/golib/terminal/editor/History.Write)
+
+
+##### <a name="github.com/billziss-gh/golib/terminal/editor/pkg-files">Package files</a>
+[doc.go](terminal/editor/doc.go) [editor.go](terminal/editor/editor.go) [history.go](terminal/editor/history.go) 
+
+
+
+### <a name="github.com/billziss-gh/golib/terminal/editor/pkg-variables">Variables</a>
+``` go
+var DefaultEditor = NewEditor(os.Stdin, os.Stdout)
+```
+DefaultEditor is the default Editor.
+
+
+
+
+### <a name="github.com/billziss-gh/golib/terminal/editor/Editor">type</a> [Editor](terminal/editor/editor.go#L56)
+``` go
+type Editor struct {
+    // contains filtered or unexported fields
+}
+```
+Editor is a command line editor with history and completion handling.
+
+
+
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/terminal/editor/NewEditor">func</a> [NewEditor](terminal/editor/editor.go#L383)
+``` go
+func NewEditor(in *os.File, out *os.File) *Editor
+```
+NewEditor creates a new editor.
+
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/terminal/editor/Editor.GetLine">func</a> (\*Editor) [GetLine](terminal/editor/editor.go#L355)
+``` go
+func (self *Editor) GetLine(prompt string) (string, error)
+```
+GetLine gets a line from the terminal.
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/terminal/editor/Editor.GetPass">func</a> (\*Editor) [GetPass](terminal/editor/editor.go#L364)
+``` go
+func (self *Editor) GetPass(prompt string) (string, error)
+```
+GetPass gets a password from the terminal.
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/terminal/editor/Editor.History">func</a> (\*Editor) [History](terminal/editor/editor.go#L378)
+``` go
+func (self *Editor) History() *History
+```
+History returns the editor's command line history.
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/terminal/editor/Editor.SetCompletionHandler">func</a> (\*Editor) [SetCompletionHandler](terminal/editor/editor.go#L373)
+``` go
+func (self *Editor) SetCompletionHandler(handler func(line string) []string)
+```
+SetCompletionHandler sets a completion handler.
+
+
+
+
+### <a name="github.com/billziss-gh/golib/terminal/editor/History">type</a> [History](terminal/editor/history.go#L23)
+``` go
+type History struct {
+    // contains filtered or unexported fields
+}
+```
+History maintains a buffer of command lines.
+
+
+
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/terminal/editor/NewHistory">func</a> [NewHistory](terminal/editor/history.go#L218)
+``` go
+func NewHistory() *History
+```
+NewHistory creates a new history buffer.
+
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/terminal/editor/History.Add">func</a> (\*History) [Add](terminal/editor/history.go#L127)
+``` go
+func (self *History) Add(line string)
+```
+Add adds a new command line to the history buffer.
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/terminal/editor/History.Clear">func</a> (\*History) [Clear](terminal/editor/history.go#L147)
+``` go
+func (self *History) Clear()
+```
+Clear clears all command lines from the history buffer.
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/terminal/editor/History.Delete">func</a> (\*History) [Delete](terminal/editor/history.go#L137)
+``` go
+func (self *History) Delete(id int)
+```
+Delete deletes a command line from the history buffer.
+The special id's of 0 or -1 mean to delete the first or last command line
+respectively.
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/terminal/editor/History.Enum">func</a> (\*History) [Enum](terminal/editor/history.go#L112)
+``` go
+func (self *History) Enum(id int, fn func(id int, line string) bool)
+```
+Enum enumerates all command lines in the history buffer starting at id.
+The special id's of 0 or -1 mean to start the enumeration with the first or
+last command line respectively.
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/terminal/editor/History.Get">func</a> (\*History) [Get](terminal/editor/history.go#L85)
+``` go
+func (self *History) Get(id int, dir int) (int, string)
+```
+Get gets a command line from the history buffer.
+
+Command lines are identified by an integer id. The special id's of 0 or -1 mean to
+retrieve the first or last command line respectively. The dir parameter is used to
+determine which command line to retrieve relative to the one identified by id: 0 is
+the current command line, +1 is the next command line, -1 is the previous command line,
+etc. When retrieving command lines the history is treated as a circular buffer.
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/terminal/editor/History.Len">func</a> (\*History) [Len](terminal/editor/history.go#L102)
+``` go
+func (self *History) Len() int
+```
+Len returns the length of the history buffer.
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/terminal/editor/History.Read">func</a> (\*History) [Read](terminal/editor/history.go#L155)
+``` go
+func (self *History) Read(reader io.Reader) (err error)
+```
+Read reads command lines from a reader into the history buffer.
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/terminal/editor/History.Reset">func</a> (\*History) [Reset](terminal/editor/history.go#L208)
+``` go
+func (self *History) Reset()
+```
+Reset fully resets the history buffer.
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/terminal/editor/History.SetCap">func</a> (\*History) [SetCap](terminal/editor/history.go#L198)
+``` go
+func (self *History) SetCap(cap int)
+```
+SetCap sets the capacity (number of command lines) of the history buffer.
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/terminal/editor/History.Write">func</a> (\*History) [Write](terminal/editor/history.go#L181)
+``` go
+func (self *History) Write(writer io.Writer) (err error)
+```
+Write writes command lines to a writer from the history buffer.
 
 
 

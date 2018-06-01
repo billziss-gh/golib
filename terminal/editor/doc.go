@@ -1,5 +1,5 @@
 /*
- * terminal_darwin.go
+ * doc.go
  *
  * Copyright 2018 Bill Zissimopoulos
  */
@@ -10,11 +10,5 @@
  * in the License.txt file at the root of this project.
  */
 
-package terminal
-
-import "syscall"
-
-const (
-	tcgetattr = syscall.TIOCGETA
-	tcsetattr = syscall.TIOCSETA
-)
+// Package editor provides simple readline functionality for Go programs.
+package editor

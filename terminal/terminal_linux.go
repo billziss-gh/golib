@@ -12,19 +12,9 @@
 
 package terminal
 
-import (
-	"os"
-	"syscall"
-	"unsafe"
+import "syscall"
+
+const (
+	tcgetattr = syscall.TCGETS
+	tcsetattr = syscall.TCSETS
 )
-
-func isTerminal(fd uintptr) bool {
-	var termios syscall.Termios
-	_, _, err := syscall.Syscall(syscall.SYS_IOCTL,
-		fd, syscall.TCGETS, uintptr(unsafe.Pointer(&termios)))
-	return 0 == err
-}
-
-func isAnsiTerminal(fd uintptr) bool {
-	return isTerminal(fd) && "dumb" != os.Getenv("TERM")
-}

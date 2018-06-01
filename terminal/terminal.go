@@ -23,3 +23,21 @@ func IsTerminal(fd uintptr) bool {
 func IsAnsiTerminal(fd uintptr) bool {
 	return isAnsiTerminal(fd)
 }
+
+type State *state
+
+func GetState(fd uintptr) (State, error) {
+	s, e := getState(fd)
+	return State(s), e
+}
+
+func SetState(fd uintptr, s State) error {
+	return setState(fd, s)
+}
+
+// MakeRaw puts the terminal in "raw" mode. In this mode the terminal performs
+// minimal processing. The fd should be the file descriptor of the terminal input.
+func MakeRaw(fd uintptr) (State, error) {
+	s, e := makeRaw(fd)
+	return State(s), e
+}
