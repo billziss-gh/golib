@@ -445,3 +445,13 @@ func NewEditor(in *os.File, out *os.File) *Editor {
 
 // DefaultEditor is the default Editor.
 var DefaultEditor = NewEditor(os.Stdin, os.Stdout)
+
+// GetLine gets a line from the terminal.
+func GetLine(prompt string) (string, error) {
+	return DefaultEditor.GetLine(prompt)
+}
+
+// GetPass gets a password from the terminal.
+func GetPass(prompt string) (string, error) {
+	return DefaultEditor.GetPass(prompt)
+}

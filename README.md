@@ -1286,6 +1286,8 @@ Package editor provides simple readline functionality for Go programs.
 
 ### <a name="github.com/billziss-gh/golib/terminal/editor/pkg-index">Index</a>
 * [Variables](#github.com/billziss-gh/golib/terminal/editor/pkg-variables)
+* [func GetLine(prompt string) (string, error)](#github.com/billziss-gh/golib/terminal/editor/GetLine)
+* [func GetPass(prompt string) (string, error)](#github.com/billziss-gh/golib/terminal/editor/GetPass)
 * [type Editor](#github.com/billziss-gh/golib/terminal/editor/Editor)
   * [func NewEditor(in *os.File, out *os.File) *Editor](#github.com/billziss-gh/golib/terminal/editor/NewEditor)
   * [func (self *Editor) GetLine(prompt string) (string, error)](#github.com/billziss-gh/golib/terminal/editor/Editor.GetLine)
@@ -1316,6 +1318,22 @@ Package editor provides simple readline functionality for Go programs.
 var DefaultEditor = NewEditor(os.Stdin, os.Stdout)
 ```
 DefaultEditor is the default Editor.
+
+
+
+### <a name="github.com/billziss-gh/golib/terminal/editor/GetLine">func</a> [GetLine](terminal/editor/editor.go#L450)
+``` go
+func GetLine(prompt string) (string, error)
+```
+GetLine gets a line from the terminal.
+
+
+
+### <a name="github.com/billziss-gh/golib/terminal/editor/GetPass">func</a> [GetPass](terminal/editor/editor.go#L455)
+``` go
+func GetPass(prompt string) (string, error)
+```
+GetPass gets a password from the terminal.
 
 
 
