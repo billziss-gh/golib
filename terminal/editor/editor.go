@@ -14,10 +14,12 @@ package editor
 
 import (
 	"bufio"
+	"fmt"
 	"io"
 	"os"
 	"runtime"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/billziss-gh/golib/terminal"
 )
@@ -63,7 +65,7 @@ type Editor struct {
 }
 
 type editorState struct {
-	pos, clr int
+	pfx, pos, clr int
 }
 
 func (self *Editor) readKey() (rune, string, error) {
@@ -89,22 +91,67 @@ func (self *Editor) readKey() (rune, string, error) {
 	return r, string(r) + string(r0) + string(r1), nil
 }
 
-func (self *Editor) redraw(echo bool, runes []rune, pos int, state *editorState) {
+func cursorBackward(n int) string {
+	// windows only
+	return strings.Repeat("\b", n)
+}
+
+func cursorForward(n int) string {
+	// unix only
+	if 0 < n {
+		return fmt.Sprintf("\x1b[%dC", n) // CUF
+	} else {
+		return ""
+	}
+}
+
+func cursorCrAndUp(n int, mod int) string {
+	// unix only
+	s := ""
+	if 0 == mod {
+		s += " \r"
+	} else {
+		s += "\r"
+	}
+	s += strings.Repeat("\x1bM", n) // RI
+	return s
+}
+
+func (self *Editor) redisplay(echo bool, runes []rune, pos int, state *editorState) {
 	if !echo {
 		return
 	}
 
-	cursorLeft := "\b"
-	if "windows" != runtime.GOOS {
-		cursorLeft = "\x1b[D" // avoids some weirdness on macOS Terminal
+	var s string
+	if "windows" == runtime.GOOS {
+		s += cursorBackward(state.pos)
+		s += string(runes)
+		if len(runes) < state.clr {
+			s += strings.Repeat(" ", state.clr-len(runes))
+			s += cursorBackward(state.clr - pos)
+		} else {
+			s += cursorBackward(len(runes) - pos)
+		}
+	} else {
+		col, _, err := terminal.GetSize(self.termfd)
+		if nil != err {
+			col = 80
+		}
+
+		s += cursorCrAndUp((state.pfx+state.pos)/col, (state.pfx+state.pos)%col)
+		s += cursorForward(state.pfx)
+		s += string(runes)
+		if len(runes) < state.clr {
+			s += strings.Repeat(" ", state.clr-len(runes))
+			s += cursorCrAndUp((state.pfx+state.clr)/col-(state.pfx+pos)/col,
+				(state.pfx+state.clr)%col)
+		} else {
+			s += cursorCrAndUp((state.pfx+len(runes))/col-(state.pfx+pos)/col,
+				(state.pfx+len(runes))%col)
+		}
+		s += cursorForward((state.pfx + pos) % col)
 	}
 
-	s := strings.Repeat(cursorLeft, state.pos) + string(runes)
-	if len(runes) < state.clr {
-		s += strings.Repeat(" ", state.clr-len(runes)) + strings.Repeat(cursorLeft, state.clr-pos)
-	} else {
-		s += strings.Repeat(cursorLeft, len(runes)-pos)
-	}
 	self.out.WriteString(s)
 
 	state.clr = len(runes)
@@ -127,7 +174,7 @@ func (self *Editor) cycleStrings(r rune, key string,
 	state = *pstate
 	for {
 		stop, runes, pos = next(r, key)
-		self.redraw(true, runes, pos, &state)
+		self.redisplay(true, runes, pos, &state)
 		if stop {
 			*prunes = runes
 			*ppos = pos
@@ -155,7 +202,9 @@ func (self *Editor) rawGetLine(echo bool, prompt string) (string, error) {
 
 	var runes []rune
 	var pos int
-	var state editorState
+	var state = editorState{
+		pfx: utf8.RuneCountInString(prompt),
+	}
 	for {
 		r, key, err := self.readKey()
 		if nil != err {
@@ -166,14 +215,14 @@ func (self *Editor) rawGetLine(echo bool, prompt string) (string, error) {
 		switch key {
 		case _Enter:
 			pos = len(runes)
-			self.redraw(echo, runes, pos, &state)
+			self.redisplay(echo, runes, pos, &state)
 			self.out.WriteString("\r\n")
 			return string(runes), nil
 		case _Backspace, _Del: // delete backward
 			if 0 < pos {
 				pos--
 				runes = append(runes[:pos], runes[pos+1:]...)
-				self.redraw(echo, runes, pos, &state)
+				self.redisplay(echo, runes, pos, &state)
 			} else {
 				self.bell()
 			}
@@ -181,7 +230,7 @@ func (self *Editor) rawGetLine(echo bool, prompt string) (string, error) {
 			if 0 < pos {
 				runes = runes[pos:]
 				pos = 0
-				self.redraw(echo, runes, pos, &state)
+				self.redisplay(echo, runes, pos, &state)
 			} else {
 				self.bell()
 			}
@@ -194,7 +243,7 @@ func (self *Editor) rawGetLine(echo bool, prompt string) (string, error) {
 				}
 				runes = append(runes[:i], runes[pos:]...)
 				pos = i
-				self.redraw(echo, runes, pos, &state)
+				self.redisplay(echo, runes, pos, &state)
 			} else {
 				self.bell()
 			}
@@ -204,7 +253,7 @@ func (self *Editor) rawGetLine(echo bool, prompt string) (string, error) {
 			}
 			if len(runes) > pos {
 				runes = append(runes[:pos], runes[pos+1:]...)
-				self.redraw(echo, runes, pos, &state)
+				self.redisplay(echo, runes, pos, &state)
 			} else {
 				self.bell()
 			}
@@ -215,7 +264,7 @@ func (self *Editor) rawGetLine(echo bool, prompt string) (string, error) {
 		case _CtrlK: // delete to end of line
 			if len(runes) > pos {
 				runes = runes[:pos]
-				self.redraw(echo, runes, pos, &state)
+				self.redisplay(echo, runes, pos, &state)
 			} else {
 				// readline does not appear to bell on Ctrl-K
 				//self.bell()
@@ -227,31 +276,31 @@ func (self *Editor) rawGetLine(echo bool, prompt string) (string, error) {
 				}
 				runes[pos-1], runes[pos] = runes[pos], runes[pos-1]
 				pos++
-				self.redraw(echo, runes, pos, &state)
+				self.redisplay(echo, runes, pos, &state)
 			} else {
 				self.bell()
 			}
 		case _CtrlA, _Home, _HomeAlt: // move to beginning of line
 			if 0 < pos {
 				pos = 0
-				self.redraw(echo, runes, pos, &state)
+				self.redisplay(echo, runes, pos, &state)
 			}
 		case _CtrlE, _End, _EndAlt: // move to end of line
 			if len(runes) > pos {
 				pos = len(runes)
-				self.redraw(echo, runes, pos, &state)
+				self.redisplay(echo, runes, pos, &state)
 			}
 		case _CtrlB, _Left: // move left
 			if 0 < pos {
 				pos--
-				self.redraw(echo, runes, pos, &state)
+				self.redisplay(echo, runes, pos, &state)
 			} else {
 				self.bell()
 			}
 		case _CtrlF, _Right: // move right
 			if len(runes) > pos {
 				pos++
-				self.redraw(echo, runes, pos, &state)
+				self.redisplay(echo, runes, pos, &state)
 			} else {
 				self.bell()
 			}
@@ -337,7 +386,7 @@ func (self *Editor) rawGetLine(echo bool, prompt string) (string, error) {
 				copy(runes[pos+1:], runes[pos:])
 				runes[pos] = r
 				pos++
-				self.redraw(echo, runes, pos, &state)
+				self.redisplay(echo, runes, pos, &state)
 			}
 		}
 	}

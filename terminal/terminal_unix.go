@@ -123,3 +123,18 @@ func makeRaw(fd uintptr) (*state, error) {
 
 	return olds, nil
 }
+
+func getSize(fd uintptr) (int, int, error) {
+	var info struct {
+		Row    uint16
+		Col    uint16
+		Xpixel uint16
+		Ypixel uint16
+	}
+	_, _, err := syscall.Syscall(syscall.SYS_IOCTL,
+		fd, syscall.TIOCGWINSZ, uintptr(unsafe.Pointer(&info)))
+	if 0 != err {
+		return 0, 0, err
+	}
+	return int(info.Col), int(info.Row), nil
+}

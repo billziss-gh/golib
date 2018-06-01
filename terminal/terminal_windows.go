@@ -52,6 +52,24 @@ const (
 )
 
 type (
+	_COORD struct {
+		X int16
+		Y int16
+	}
+	_SMALL_RECT struct {
+		Left   int16
+		Top    int16
+		Right  int16
+		Bottom int16
+	}
+	_CONSOLE_SCREEN_BUFFER_INFO struct {
+		Size              _COORD
+		CursorPosition    _COORD
+		Attributes        uint16
+		Window            _SMALL_RECT
+		MaximumWindowSize _COORD
+	}
+
 	_KEY_EVENT_RECORD struct {
 		KeyDown         int32
 		RepeatCount     uint16
@@ -67,10 +85,11 @@ type (
 )
 
 var (
-	dll              = syscall.NewLazyDLL("kernel32.dll")
-	getConsoleMode   = dll.NewProc("GetConsoleMode")
-	setConsoleMode   = dll.NewProc("SetConsoleMode")
-	readConsoleInput = dll.NewProc("ReadConsoleInputW")
+	dll                        = syscall.NewLazyDLL("kernel32.dll")
+	getConsoleMode             = dll.NewProc("GetConsoleMode")
+	setConsoleMode             = dll.NewProc("SetConsoleMode")
+	getConsoleScreenBufferInfo = dll.NewProc("GetConsoleScreenBufferInfo")
+	readConsoleInput           = dll.NewProc("ReadConsoleInputW")
 )
 
 func isTerminal(fd uintptr) bool {
@@ -152,4 +171,13 @@ func makeRaw(fd uintptr) (*state, error) {
 	}
 
 	return olds, nil
+}
+
+func getSize(fd uintptr) (int, int, error) {
+	var info _CONSOLE_SCREEN_BUFFER_INFO
+	res, _, err := getConsoleScreenBufferInfo.Call(fd, uintptr(unsafe.Pointer(&info)))
+	if 0 == res {
+		return 0, 0, err
+	}
+	return int(info.Size.X), int(info.Size.Y), nil
 }

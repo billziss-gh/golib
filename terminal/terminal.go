@@ -41,3 +41,8 @@ func MakeRaw(fd uintptr) (State, error) {
 	s, e := makeRaw(fd)
 	return State(s), e
 }
+
+// GetSize gets the terminal size (cols x rows).
+func GetSize(fd uintptr) (int, int, error) {
+	return getSize(fd)
+}
