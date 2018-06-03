@@ -8,6 +8,7 @@
 * [errors](#github.com/billziss-gh/golib/errors) - Package errors implements functions for advanced error handling.
 * [keyring](#github.com/billziss-gh/golib/keyring) - Package keyring implements functions for accessing and storing passwords in the system's keyring (Keychain on macOS, Credential Manager on Windows, Secret Service on Linux).
 * [retry](#github.com/billziss-gh/golib/retry) - Package retry implements simple retry functionality.
+* [shlex](#github.com/billziss-gh/golib/shlex) - Package shlex is used for simple command line splitting.
 * [terminal](#github.com/billziss-gh/golib/terminal) - Package terminal provides functionality for terminals.
   * [editor](#github.com/billziss-gh/golib/terminal/editor) - Package editor provides simple readline functionality for Go programs.
 * [trace](#github.com/billziss-gh/golib/trace) - Package trace provides a simple tracing facility for Go functions.
@@ -1092,6 +1093,178 @@ Count limits the number of retries performed by Retry.
 func Retry(actions ...func(int) bool)
 ```
 Retry performs actions repeatedly until one of the actions returns false.
+
+
+
+
+
+
+
+
+
+
+
+----
+## <a name="github.com/billziss-gh/golib/shlex">Package shlex</a>
+_[[godoc.org](https://godoc.org/github.com/billziss-gh/golib/shlex)]_
+
+`import "github.com/billziss-gh/golib/shlex"`
+
+* [Overview](#github.com/billziss-gh/golib/shlex/pkg-overview)
+* [Index](#github.com/billziss-gh/golib/shlex/pkg-index)
+
+### <a name="github.com/billziss-gh/golib/shlex/pkg-overview">Overview</a>
+Package shlex is used for simple command line splitting.
+
+Both POSIX and Windows dialects are provided.
+
+
+
+
+### <a name="github.com/billziss-gh/golib/shlex/pkg-index">Index</a>
+* [Constants](#github.com/billziss-gh/golib/shlex/pkg-constants)
+* [Variables](#github.com/billziss-gh/golib/shlex/pkg-variables)
+* [type Dialect](#github.com/billziss-gh/golib/shlex/Dialect)
+  * [func (dialect *Dialect) Split(line string) (tokens []string)](#github.com/billziss-gh/golib/shlex/Dialect.Split)
+
+
+##### <a name="github.com/billziss-gh/golib/shlex/pkg-files">Package files</a>
+[shlex.go](shlex/shlex.go) 
+
+
+### <a name="github.com/billziss-gh/golib/shlex/pkg-constants">Constants</a>
+``` go
+const (
+    Space       = rune(' ')
+    Word        = rune('A')
+    DoubleQuote = rune('"')
+    SingleQuote = rune('\'')
+    EmptyRune   = rune(-2)
+    NoEscape    = rune(-1)
+)
+```
+
+### <a name="github.com/billziss-gh/golib/shlex/pkg-variables">Variables</a>
+``` go
+var Posix = Dialect{
+    IsSpace: func(r rune) bool {
+        return ' ' == r || '\t' == r || '\n' == r
+    },
+    IsQuote: func(r rune) bool {
+        return '"' == r || '\'' == r
+    },
+    Escape: func(s rune, r, r0 rune) rune {
+        if '\\' != r {
+            return NoEscape
+        }
+        switch s {
+        case Space, Word:
+            if '\n' == r0 || EmptyRune == r0 {
+                return EmptyRune
+            }
+            return r0
+        case DoubleQuote:
+            if '\n' == r0 || EmptyRune == r0 {
+                return EmptyRune
+            }
+            if '$' == r0 || '`' == r0 || '"' == r0 || '\\' == r0 {
+                return r0
+            }
+            return NoEscape
+        default:
+            return NoEscape
+        }
+    },
+}
+```
+Posix is the POSIX dialect of command line splitting.
+See <a href="https://tinyurl.com/26man79">https://tinyurl.com/26man79</a> for guidelines.
+
+``` go
+var Windows = Dialect{
+    IsSpace: func(r rune) bool {
+        return ' ' == r || '\t' == r || '\r' == r || '\n' == r
+    },
+    IsQuote: func(r rune) bool {
+        return '"' == r
+    },
+    Escape: func(s rune, r, r0 rune) rune {
+        switch s {
+        case Space, Word:
+            if '\\' == r && '"' == r0 {
+                return r0
+            }
+            return NoEscape
+        case DoubleQuote:
+            if ('\\' == r || '"' == r) && '"' == r0 {
+                return r0
+            }
+            return NoEscape
+        default:
+            return NoEscape
+        }
+    },
+    LongEscape: func(s rune, r rune, line string) ([]rune, string, rune, int) {
+
+        if '\\' != r {
+            return nil, "", 0, 0
+        }
+
+        var w int
+        n := 0
+        for {
+            r, w = utf8.DecodeRuneInString(line[n:])
+            n++
+            if 0 == w || '\\' != r {
+                break
+            }
+        }
+
+        if 2 > n {
+            return nil, "", 0, 0
+        }
+
+        if '"' != r {
+            return []rune(strings.Repeat("\\", n-1)), line[n-1:], r, w
+        } else if 0 == n&1 {
+            return []rune(strings.Repeat("\\", n/2-1)), line[n-1:], '"', 1
+        } else {
+            return []rune(strings.Repeat("\\", n/2-1)), line[n-2:], '\\', 1
+        }
+    },
+}
+```
+Windows is the Windows dialect of command line splitting.
+See <a href="https://tinyurl.com/ycdj5ghh">https://tinyurl.com/ycdj5ghh</a> for guidelines.
+
+
+
+
+### <a name="github.com/billziss-gh/golib/shlex/Dialect">type</a> [Dialect](shlex/shlex.go#L33)
+``` go
+type Dialect struct {
+    IsSpace    func(r rune) bool
+    IsQuote    func(r rune) bool
+    Escape     func(s rune, r, r0 rune) rune
+    LongEscape func(s rune, r rune, line string) ([]rune, string, rune, int)
+}
+```
+Dialect represents a dialect of command line splitting.
+
+
+
+
+
+
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/shlex/Dialect.Split">func</a> (\*Dialect) [Split](shlex/shlex.go#L141)
+``` go
+func (dialect *Dialect) Split(line string) (tokens []string)
+```
+Split splits a command line into tokens according to the chosen dialect.
 
 
 
