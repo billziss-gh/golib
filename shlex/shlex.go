@@ -16,6 +16,7 @@
 package shlex
 
 import (
+	"strings"
 	"unicode/utf8"
 )
 
@@ -30,9 +31,10 @@ const (
 
 // Dialect represents a dialect of command line splitting.
 type Dialect struct {
-	IsSpace func(r rune) bool
-	IsQuote func(r rune) bool
-	Escape  func(s rune, r, r0 rune) rune
+	IsSpace    func(r rune) bool
+	IsQuote    func(r rune) bool
+	Escape     func(s rune, r, r0 rune) rune
+	LongEscape func(s rune, r rune, line string) ([]rune, string, rune, int)
 }
 
 // Posix is the POSIX dialect of command line splitting.
@@ -93,6 +95,46 @@ var Windows = Dialect{
 			return NoEscape
 		}
 	},
+	LongEscape: func(s rune, r rune, line string) ([]rune, string, rune, int) {
+		// support crazy Windows backslash logic:
+		// - 2n backslashes followed by a '"' produce n backslashes + start/end double quoted part
+		// - 2n+1 backslashes followed by a '"' produce n backslashes + a literal '"'
+		// - n backslashes not followed by a '"' produce n backslashes
+
+		// On entry:
+		// - s: current parser state (Space, Word, DoubleQuote)
+		// - r: current rune (must be \ for LongEscape sequence)
+		//     - this has been already added to the current token
+		// - line: remaining line after r
+
+		if '\\' != r {
+			return nil, "", 0, 0
+		}
+
+		var w int
+		n := 0
+		for {
+			r, w = utf8.DecodeRuneInString(line[n:])
+			n++
+			if 0 == w || '\\' != r {
+				break
+			}
+		}
+
+		// n is count of \ including the one on entry to this function
+
+		if 2 > n {
+			return nil, "", 0, 0
+		}
+
+		if '"' != r {
+			return []rune(strings.Repeat("\\", n-1)), line[n-1:], r, w
+		} else if 0 == n&1 {
+			return []rune(strings.Repeat("\\", n/2-1)), line[n-1:], '"', 1
+		} else {
+			return []rune(strings.Repeat("\\", n/2-1)), line[n-2:], '\\', 1
+		}
+	},
 }
 
 // Split splits a command line into tokens according to the chosen dialect.
@@ -107,19 +149,17 @@ func (dialect *Dialect) Split(line string) (tokens []string) {
 		r0, w0 := utf8.DecodeRuneInString(line)
 
 		s := state[len(state)-1]
-		e := NoEscape
+		var e rune
 		if 0 != w0 {
 			e = dialect.Escape(s, r, r0)
-			if NoEscape != e {
-				line = line[w0:]
-				r0, w0 = utf8.DecodeRuneInString(line)
-				if EmptyRune == e {
-					r, w = r0, w0
-					continue
-				}
-			}
 		} else {
 			e = dialect.Escape(s, r, EmptyRune)
+		}
+		if NoEscape != e {
+			if 0 != w0 {
+				line = line[w0:]
+				r0, w0 = utf8.DecodeRuneInString(line)
+			}
 			if EmptyRune == e {
 				r, w = r0, w0
 				continue
@@ -160,6 +200,15 @@ func (dialect *Dialect) Split(line string) (tokens []string) {
 				state = state[:len(state)-1]
 			default:
 				token = append(token, r)
+			}
+		}
+
+		if NoEscape == e && nil != dialect.LongEscape {
+			if er, line1, r1, w1 := dialect.LongEscape(s, r, line); nil != er {
+				token = append(token, er...)
+				line = line1
+				r0 = r1
+				w0 = w1
 			}
 		}
 
