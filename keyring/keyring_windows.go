@@ -71,9 +71,9 @@ func (self *SystemKeyring) get(key string) (user string, pass string, err error)
 	defer credFree.Call(uintptr(unsafe.Pointer(pcred)))
 
 	user = syscall.UTF16ToString(
-		(*[1 << 30]uint16)(unsafe.Pointer(pcred.userName))[:])
+		(*[1 << 29]uint16)(unsafe.Pointer(pcred.userName))[:])
 	pass = syscall.UTF16ToString(
-		(*[1 << 30]uint16)(unsafe.Pointer(pcred.credentialBlob))[:pcred.credentialBlobSize])
+		(*[1 << 29]uint16)(unsafe.Pointer(pcred.credentialBlob))[:pcred.credentialBlobSize])
 	err = nil
 	return
 }
