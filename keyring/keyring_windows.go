@@ -36,7 +36,7 @@ type credential struct {
 	comment            *uint16
 	lastWritten        uint64
 	credentialBlobSize uint32
-	credentialBlob     *uint16
+	credentialBlob     *uint8
 	persist            uint32
 	attributeCount     uint32
 	attributes         unsafe.Pointer
@@ -72,8 +72,8 @@ func (self *SystemKeyring) get(key string) (user string, pass string, err error)
 
 	user = syscall.UTF16ToString(
 		(*[1 << 29]uint16)(unsafe.Pointer(pcred.userName))[:])
-	pass = syscall.UTF16ToString(
-		(*[1 << 29]uint16)(unsafe.Pointer(pcred.credentialBlob))[:pcred.credentialBlobSize])
+	pass = string(
+		(*[1 << 30]uint8)(unsafe.Pointer(pcred.credentialBlob))[:pcred.credentialBlobSize])
 	err = nil
 	return
 }
@@ -90,12 +90,9 @@ func (self *SystemKeyring) set(key, user, pass string) (err error) {
 	if nil != err {
 		return
 	}
-	cred.credentialBlobSize = uint32((len(pass) + 1) * 2)
-	cred.credentialBlob, err = syscall.UTF16PtrFromString(pass)
-	if nil != err {
-		return
-	}
-
+	blob := []byte(pass)
+	cred.credentialBlobSize = uint32(len(blob))
+	cred.credentialBlob = &blob[0]
 	res, _, err := credWrite.Call(
 		uintptr(unsafe.Pointer(&cred)), 0)
 	if 0 == res {
