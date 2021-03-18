@@ -2,6 +2,7 @@
 
 [//]: # (GODOC)
 * [appdata](#github.com/billziss-gh/golib/appdata) - Package appdata provides access to well known directories for applications.
+* [cache](#github.com/billziss-gh/golib/cache) - Package cache provides LRU cache map functionality.
 * [cmd](#github.com/billziss-gh/golib/cmd) - Package cmd provides (sub-)command functionality for command-line programs.
 * [config](#github.com/billziss-gh/golib/config) - Package config is used to read and write configuration files.
   * [flag](#github.com/billziss-gh/golib/config/flag) - Package flag facilitates use of the standard library package flag with package config.
@@ -40,7 +41,7 @@ Package appdata provides access to well known directories for applications.
 
 
 ##### <a name="github.com/billziss-gh/golib/appdata/pkg-files">Package files</a>
-[appdata.go](appdata/appdata.go) [appdata_darwin.go](appdata/appdata_darwin.go) 
+[appdata.go](appdata/appdata.go) [appdata_windows.go](appdata/appdata_windows.go) 
 
 
 ### <a name="github.com/billziss-gh/golib/appdata/pkg-constants">Constants</a>
@@ -95,6 +96,240 @@ var DefaultAppData AppData
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+----
+## <a name="github.com/billziss-gh/golib/cache">Package cache</a>
+_[[godoc.org](https://godoc.org/github.com/billziss-gh/golib/cache)]_
+
+`import "github.com/billziss-gh/golib/cache"`
+
+* [Overview](#github.com/billziss-gh/golib/cache/pkg-overview)
+* [Index](#github.com/billziss-gh/golib/cache/pkg-index)
+
+### <a name="github.com/billziss-gh/golib/cache/pkg-overview">Overview</a>
+Package cache provides LRU cache map functionality.
+
+
+
+
+### <a name="github.com/billziss-gh/golib/cache/pkg-index">Index</a>
+* [type Map](#github.com/billziss-gh/golib/cache/Map)
+  * [func NewMap(list *MapItem) *Map](#github.com/billziss-gh/golib/cache/NewMap)
+  * [func (cache *Map) Delete(key string)](#github.com/billziss-gh/golib/cache/Map.Delete)
+  * [func (cache *Map) Expire(fn func(list, item *MapItem) bool)](#github.com/billziss-gh/golib/cache/Map.Expire)
+  * [func (cache *Map) Get(key string) (*MapItem, bool)](#github.com/billziss-gh/golib/cache/Map.Get)
+  * [func (cache *Map) Items() map[string]*MapItem](#github.com/billziss-gh/golib/cache/Map.Items)
+  * [func (cache *Map) Set(key string, newitem *MapItem, expirable bool)](#github.com/billziss-gh/golib/cache/Map.Set)
+* [type MapItem](#github.com/billziss-gh/golib/cache/MapItem)
+  * [func (item *MapItem) Empty()](#github.com/billziss-gh/golib/cache/MapItem.Empty)
+  * [func (list *MapItem) Expire(fn func(list, item *MapItem) bool)](#github.com/billziss-gh/golib/cache/MapItem.Expire)
+  * [func (item *MapItem) InsertHead(list *MapItem)](#github.com/billziss-gh/golib/cache/MapItem.InsertHead)
+  * [func (item *MapItem) InsertTail(list *MapItem)](#github.com/billziss-gh/golib/cache/MapItem.InsertTail)
+  * [func (item *MapItem) IsEmpty() bool](#github.com/billziss-gh/golib/cache/MapItem.IsEmpty)
+  * [func (list *MapItem) Iterate(fn func(list, item *MapItem) bool)](#github.com/billziss-gh/golib/cache/MapItem.Iterate)
+  * [func (item *MapItem) Remove()](#github.com/billziss-gh/golib/cache/MapItem.Remove)
+
+
+##### <a name="github.com/billziss-gh/golib/cache/pkg-files">Package files</a>
+[map.go](cache/map.go) 
+
+
+
+
+
+
+### <a name="github.com/billziss-gh/golib/cache/Map">type</a> [Map](cache/map.go#L93)
+``` go
+type Map struct {
+    // contains filtered or unexported fields
+}
+
+```
+Map is a map of key/value pairs that also maintains its items
+in an LRU (Least Recently Used) list. LRU items may then be expired.
+
+
+
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/cache/NewMap">func</a> [NewMap](cache/map.go#L159)
+``` go
+func NewMap(list *MapItem) *Map
+```
+NewMap creates a new cache map.
+
+The cache map tracks items in the LRU list specified by the list
+parameter. If the list parameter is nil then items are tracked in
+an internal list.
+
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/cache/Map.Delete">func</a> (\*Map) [Delete](cache/map.go#L139)
+``` go
+func (cache *Map) Delete(key string)
+```
+Delete deletes an item by key.
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/cache/Map.Expire">func</a> (\*Map) [Expire](cache/map.go#L150)
+``` go
+func (cache *Map) Expire(fn func(list, item *MapItem) bool)
+```
+Expire performs list item expiration using a helper function.
+
+See MapItem.Expire for a full discussion.
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/cache/Map.Get">func</a> (\*Map) [Get](cache/map.go#L109)
+``` go
+func (cache *Map) Get(key string) (*MapItem, bool)
+```
+Get gets an item by key.
+
+Get "touches" the item to show that it was recently used. For this
+reason Get modifies the internal structure of the cache map and is
+not safe to be called under a read lock.
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/cache/Map.Items">func</a> (\*Map) [Items](cache/map.go#L100)
+``` go
+func (cache *Map) Items() map[string]*MapItem
+```
+Items returns the internal map of the cache map.
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/cache/Map.Set">func</a> (\*Map) [Set](cache/map.go#L125)
+``` go
+func (cache *Map) Set(key string, newitem *MapItem, expirable bool)
+```
+Set sets an item by key.
+
+Whether the new item can be expired is controlled by the expirable parameter.
+Expirable items are tracked in an LRU list.
+
+
+
+
+### <a name="github.com/billziss-gh/golib/cache/MapItem">type</a> [MapItem](cache/map.go#L17)
+``` go
+type MapItem struct {
+    Value interface{}
+    // contains filtered or unexported fields
+}
+
+```
+MapItem is the data structure that is stored in a Map.
+
+
+
+
+
+
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/cache/MapItem.Empty">func</a> (\*MapItem) [Empty](cache/map.go#L23)
+``` go
+func (item *MapItem) Empty()
+```
+Empty initializes the list item as empty.
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/cache/MapItem.Expire">func</a> (\*MapItem) [Expire](cache/map.go#L86)
+``` go
+func (list *MapItem) Expire(fn func(list, item *MapItem) bool)
+```
+Expire performs list item expiration using a helper function.
+
+Expire iterates over the list and calls the helper function fn()
+on every list item. The function fn() must perform an expiration
+test on the list item and perform one of the following:
+
+- If the list item is not expired, fn() must return false. Expire
+will then stop the loop iteration.
+
+- If the list item is expired, fn() has two options. It may remove
+the item by using item.Remove() (item eviction). Or it may remove
+the item by using item.Remove() and reinsert the item at the list
+tail using item.InsertTail(list) (item refresh). In this second case
+care must be taken to ensure that fn() returns false for some item
+in the list; otherwise the Expire iteration will continue forever,
+because the list will never be found empty.
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/cache/MapItem.InsertHead">func</a> (\*MapItem) [InsertHead](cache/map.go#L34)
+``` go
+func (item *MapItem) InsertHead(list *MapItem)
+```
+InsertHead inserts the list item to the head of a list.
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/cache/MapItem.InsertTail">func</a> (\*MapItem) [InsertTail](cache/map.go#L43)
+``` go
+func (item *MapItem) InsertTail(list *MapItem)
+```
+InsertTail inserts the list item to the tail of a list.
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/cache/MapItem.IsEmpty">func</a> (\*MapItem) [IsEmpty](cache/map.go#L29)
+``` go
+func (item *MapItem) IsEmpty() bool
+```
+IsEmpty determines if the list item is empty.
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/cache/MapItem.Iterate">func</a> (\*MapItem) [Iterate](cache/map.go#L65)
+``` go
+func (list *MapItem) Iterate(fn func(list, item *MapItem) bool)
+```
+Iterate iterates over the list using a helper function.
+
+Iterate iterates over the list and calls the helper function fn()
+on every list item. The function fn() must not modify the list in
+any way. The function fn() must return true to continue the iteration
+and false to stop it.
+
+
+
+
+#### <a name="github.com/billziss-gh/golib/cache/MapItem.Remove">func</a> (\*MapItem) [Remove](cache/map.go#L52)
+``` go
+func (item *MapItem) Remove()
+```
+Remove removes the list item from any list it is in.
 
 
 
@@ -194,6 +429,7 @@ type Cmd struct {
     // Desc contains the command description.
     Desc string
 }
+
 ```
 Cmd encapsulates a (sub-)command.
 
@@ -237,6 +473,7 @@ GetFlag gets the value of the named flag.
 type CmdMap struct {
     // contains filtered or unexported fields
 }
+
 ```
 CmdMap encapsulates a (sub-)command map.
 
@@ -498,6 +735,7 @@ type Dialect struct {
     // Strict determines whether parse errors should be reported.
     Strict bool
 }
+
 ```
 Dialect is used to represent different dialects of configuration files.
 
@@ -821,13 +1059,13 @@ Windows, Secret Service on Linux).
   * [func (self *OverlayKeyring) Get(service, user string) (string, error)](#github.com/billziss-gh/golib/keyring/OverlayKeyring.Get)
   * [func (self *OverlayKeyring) Set(service, user, pass string) error](#github.com/billziss-gh/golib/keyring/OverlayKeyring.Set)
 * [type SystemKeyring](#github.com/billziss-gh/golib/keyring/SystemKeyring)
-  * [func (self *SystemKeyring) Delete(service, user string) error](#github.com/billziss-gh/golib/keyring/SystemKeyring.Delete)
-  * [func (self *SystemKeyring) Get(service, user string) (string, error)](#github.com/billziss-gh/golib/keyring/SystemKeyring.Get)
-  * [func (self *SystemKeyring) Set(service, user, pass string) error](#github.com/billziss-gh/golib/keyring/SystemKeyring.Set)
+  * [func (self *SystemKeyring) Delete(service, user string) (err error)](#github.com/billziss-gh/golib/keyring/SystemKeyring.Delete)
+  * [func (self *SystemKeyring) Get(service, user string) (pass string, err error)](#github.com/billziss-gh/golib/keyring/SystemKeyring.Get)
+  * [func (self *SystemKeyring) Set(service, user, pass string) (err error)](#github.com/billziss-gh/golib/keyring/SystemKeyring.Set)
 
 
 ##### <a name="github.com/billziss-gh/golib/keyring/pkg-files">Package files</a>
-[keyring_darwin.go](keyring/keyring_darwin.go) [keyring_default.go](keyring/keyring_default.go) [keyring_file.go](keyring/keyring_file.go) [keyring_overlay.go](keyring/keyring_overlay.go) 
+[keyring_default.go](keyring/keyring_default.go) [keyring_file.go](keyring/keyring_file.go) [keyring_overlay.go](keyring/keyring_overlay.go) [keyring_windows.go](keyring/keyring_windows.go) 
 
 
 ### <a name="github.com/billziss-gh/golib/keyring/pkg-constants">Constants</a>
@@ -869,6 +1107,7 @@ type FileKeyring struct {
     Key  []byte
     // contains filtered or unexported fields
 }
+
 ```
 FileKeyring is a keyring that stores passwords in a file.
 
@@ -939,6 +1178,7 @@ type OverlayKeyring struct {
     Keyrings []Keyring
     // contains filtered or unexported fields
 }
+
 ```
 OverlayKeyring is a keyring that stores passwords in a hierarchy of keyrings.
 
@@ -972,10 +1212,11 @@ func (self *OverlayKeyring) Set(service, user, pass string) error
 
 
 
-### <a name="github.com/billziss-gh/golib/keyring/SystemKeyring">type</a> [SystemKeyring](keyring/keyring_darwin.go#L24)
+### <a name="github.com/billziss-gh/golib/keyring/SystemKeyring">type</a> [SystemKeyring](keyring/keyring_windows.go#L24)
 ``` go
 type SystemKeyring struct {
 }
+
 ```
 SystemKeyring implements the system-specific keyring.
 
@@ -988,23 +1229,23 @@ SystemKeyring implements the system-specific keyring.
 
 
 
-#### <a name="github.com/billziss-gh/golib/keyring/SystemKeyring.Delete">func</a> (\*SystemKeyring) [Delete](keyring/keyring_darwin.go#L58)
+#### <a name="github.com/billziss-gh/golib/keyring/SystemKeyring.Delete">func</a> (\*SystemKeyring) [Delete](keyring/keyring_windows.go#L148)
 ``` go
-func (self *SystemKeyring) Delete(service, user string) error
+func (self *SystemKeyring) Delete(service, user string) (err error)
 ```
 
 
 
-#### <a name="github.com/billziss-gh/golib/keyring/SystemKeyring.Get">func</a> (\*SystemKeyring) [Get](keyring/keyring_darwin.go#L27)
+#### <a name="github.com/billziss-gh/golib/keyring/SystemKeyring.Get">func</a> (\*SystemKeyring) [Get](keyring/keyring_windows.go#L124)
 ``` go
-func (self *SystemKeyring) Get(service, user string) (string, error)
+func (self *SystemKeyring) Get(service, user string) (pass string, err error)
 ```
 
 
 
-#### <a name="github.com/billziss-gh/golib/keyring/SystemKeyring.Set">func</a> (\*SystemKeyring) [Set](keyring/keyring_darwin.go#L49)
+#### <a name="github.com/billziss-gh/golib/keyring/SystemKeyring.Set">func</a> (\*SystemKeyring) [Set](keyring/keyring_windows.go#L135)
 ``` go
-func (self *SystemKeyring) Set(service, user, pass string) error
+func (self *SystemKeyring) Set(service, user, pass string) (err error)
 ```
 
 
@@ -1248,6 +1489,7 @@ type Dialect struct {
     Escape     func(s rune, r, r0 rune) rune
     LongEscape func(s rune, r rune, line string) ([]rune, string, rune, int)
 }
+
 ```
 Dialect represents a dialect of command line splitting.
 
@@ -1308,7 +1550,7 @@ Package terminal provides functionality for terminals.
 
 
 ##### <a name="github.com/billziss-gh/golib/terminal/pkg-files">Package files</a>
-[codes.go](terminal/codes.go) [escape.go](terminal/escape.go) [reader.go](terminal/reader.go) [reader_unix.go](terminal/reader_unix.go) [stdio.go](terminal/stdio.go) [terminal.go](terminal/terminal.go) [terminal_darwin.go](terminal/terminal_darwin.go) [terminal_unix.go](terminal/terminal_unix.go) 
+[codes.go](terminal/codes.go) [escape.go](terminal/escape.go) [reader.go](terminal/reader.go) [reader_windows.go](terminal/reader_windows.go) [stdio.go](terminal/stdio.go) [terminal.go](terminal/terminal.go) [terminal_windows.go](terminal/terminal_windows.go) 
 
 
 
@@ -1516,6 +1758,7 @@ GetPass gets a password from the terminal.
 type Editor struct {
     // contains filtered or unexported fields
 }
+
 ```
 Editor is a command line editor with history and completion handling.
 
@@ -1576,6 +1819,7 @@ SetCompletionHandler sets a completion handler.
 type History struct {
     // contains filtered or unexported fields
 }
+
 ```
 History maintains a buffer of command lines.
 

@@ -1,7 +1,7 @@
 /*
  * appdata_darwin.go
  *
- * Copyright 2018 Bill Zissimopoulos
+ * Copyright 2018-2021 Bill Zissimopoulos
  */
 /*
  * This file is part of golib.
