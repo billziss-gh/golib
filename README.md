@@ -125,11 +125,12 @@ Package cache provides LRU cache map functionality.
 ### <a name="github.com/billziss-gh/golib/cache/pkg-index">Index</a>
 * [type Map](#github.com/billziss-gh/golib/cache/Map)
   * [func NewMap(list *MapItem) *Map](#github.com/billziss-gh/golib/cache/NewMap)
-  * [func (cache *Map) Delete(key string)](#github.com/billziss-gh/golib/cache/Map.Delete)
-  * [func (cache *Map) Expire(fn func(list, item *MapItem) bool)](#github.com/billziss-gh/golib/cache/Map.Expire)
-  * [func (cache *Map) Get(key string) (*MapItem, bool)](#github.com/billziss-gh/golib/cache/Map.Get)
-  * [func (cache *Map) Items() map[string]*MapItem](#github.com/billziss-gh/golib/cache/Map.Items)
-  * [func (cache *Map) Set(key string, newitem *MapItem, expirable bool)](#github.com/billziss-gh/golib/cache/Map.Set)
+  * [func (cmap *Map) Delete(key string)](#github.com/billziss-gh/golib/cache/Map.Delete)
+  * [func (cmap *Map) Expire(fn func(list, item *MapItem) bool)](#github.com/billziss-gh/golib/cache/Map.Expire)
+  * [func (cmap *Map) Get(key string) (*MapItem, bool)](#github.com/billziss-gh/golib/cache/Map.Get)
+  * [func (cmap *Map) InitMap(list *MapItem)](#github.com/billziss-gh/golib/cache/Map.InitMap)
+  * [func (cmap *Map) Items() map[string]*MapItem](#github.com/billziss-gh/golib/cache/Map.Items)
+  * [func (cmap *Map) Set(key string, newitem *MapItem, expirable bool)](#github.com/billziss-gh/golib/cache/Map.Set)
 * [type MapItem](#github.com/billziss-gh/golib/cache/MapItem)
   * [func (item *MapItem) Empty()](#github.com/billziss-gh/golib/cache/MapItem.Empty)
   * [func (list *MapItem) Expire(fn func(list, item *MapItem) bool)](#github.com/billziss-gh/golib/cache/MapItem.Expire)
@@ -164,7 +165,7 @@ in an LRU (Least Recently Used) list. LRU items may then be expired.
 
 
 
-#### <a name="github.com/billziss-gh/golib/cache/NewMap">func</a> [NewMap](cache/map.go#L159)
+#### <a name="github.com/billziss-gh/golib/cache/NewMap">func</a> [NewMap](cache/map.go#L174)
 ``` go
 func NewMap(list *MapItem) *Map
 ```
@@ -180,7 +181,7 @@ an internal list.
 
 #### <a name="github.com/billziss-gh/golib/cache/Map.Delete">func</a> (\*Map) [Delete](cache/map.go#L139)
 ``` go
-func (cache *Map) Delete(key string)
+func (cmap *Map) Delete(key string)
 ```
 Delete deletes an item by key.
 
@@ -189,7 +190,7 @@ Delete deletes an item by key.
 
 #### <a name="github.com/billziss-gh/golib/cache/Map.Expire">func</a> (\*Map) [Expire](cache/map.go#L150)
 ``` go
-func (cache *Map) Expire(fn func(list, item *MapItem) bool)
+func (cmap *Map) Expire(fn func(list, item *MapItem) bool)
 ```
 Expire performs list item expiration using a helper function.
 
@@ -200,7 +201,7 @@ See MapItem.Expire for a full discussion.
 
 #### <a name="github.com/billziss-gh/golib/cache/Map.Get">func</a> (\*Map) [Get](cache/map.go#L109)
 ``` go
-func (cache *Map) Get(key string) (*MapItem, bool)
+func (cmap *Map) Get(key string) (*MapItem, bool)
 ```
 Get gets an item by key.
 
@@ -211,9 +212,22 @@ not safe to be called under a read lock.
 
 
 
+#### <a name="github.com/billziss-gh/golib/cache/Map.InitMap">func</a> (\*Map) [InitMap](cache/map.go#L159)
+``` go
+func (cmap *Map) InitMap(list *MapItem)
+```
+InitMap initializes a zero cache map.
+
+The cache map tracks items in the LRU list specified by the list
+parameter. If the list parameter is nil then items are tracked in
+an internal list.
+
+
+
+
 #### <a name="github.com/billziss-gh/golib/cache/Map.Items">func</a> (\*Map) [Items](cache/map.go#L100)
 ``` go
-func (cache *Map) Items() map[string]*MapItem
+func (cmap *Map) Items() map[string]*MapItem
 ```
 Items returns the internal map of the cache map.
 
@@ -222,7 +236,7 @@ Items returns the internal map of the cache map.
 
 #### <a name="github.com/billziss-gh/golib/cache/Map.Set">func</a> (\*Map) [Set](cache/map.go#L125)
 ``` go
-func (cache *Map) Set(key string, newitem *MapItem, expirable bool)
+func (cmap *Map) Set(key string, newitem *MapItem, expirable bool)
 ```
 Set sets an item by key.
 

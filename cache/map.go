@@ -97,8 +97,8 @@ type Map struct {
 }
 
 // Items returns the internal map of the cache map.
-func (cache *Map) Items() map[string]*MapItem {
-	return cache.items
+func (cmap *Map) Items() map[string]*MapItem {
+	return cmap.items
 }
 
 // Get gets an item by key.
@@ -106,12 +106,12 @@ func (cache *Map) Items() map[string]*MapItem {
 // Get "touches" the item to show that it was recently used. For this
 // reason Get modifies the internal structure of the cache map and is
 // not safe to be called under a read lock.
-func (cache *Map) Get(key string) (*MapItem, bool) {
-	item, ok := cache.items[key]
+func (cmap *Map) Get(key string) (*MapItem, bool) {
+	item, ok := cmap.items[key]
 	if ok {
 		item.Remove()
 		if !item.IsEmpty() {
-			item.InsertTail(cache.list)
+			item.InsertTail(cmap.list)
 		}
 		return item, true
 	}
@@ -122,33 +122,48 @@ func (cache *Map) Get(key string) (*MapItem, bool) {
 //
 // Whether the new item can be expired is controlled by the expirable parameter.
 // Expirable items are tracked in an LRU list.
-func (cache *Map) Set(key string, newitem *MapItem, expirable bool) {
-	item, ok := cache.items[key]
+func (cmap *Map) Set(key string, newitem *MapItem, expirable bool) {
+	item, ok := cmap.items[key]
 	if ok {
 		item.Remove()
 	}
 	if expirable {
-		newitem.InsertTail(cache.list)
+		newitem.InsertTail(cmap.list)
 	} else {
 		newitem.Empty()
 	}
-	cache.items[key] = newitem
+	cmap.items[key] = newitem
 }
 
 // Delete deletes an item by key.
-func (cache *Map) Delete(key string) {
-	item, ok := cache.items[key]
+func (cmap *Map) Delete(key string) {
+	item, ok := cmap.items[key]
 	if ok {
 		item.Remove()
-		delete(cache.items, key)
+		delete(cmap.items, key)
 	}
 }
 
 // Expire performs list item expiration using a helper function.
 //
 // See MapItem.Expire for a full discussion.
-func (cache *Map) Expire(fn func(list, item *MapItem) bool) {
-	cache.list.Expire(fn)
+func (cmap *Map) Expire(fn func(list, item *MapItem) bool) {
+	cmap.list.Expire(fn)
+}
+
+// InitMap initializes a zero cache map.
+//
+// The cache map tracks items in the LRU list specified by the list
+// parameter. If the list parameter is nil then items are tracked in
+// an internal list.
+func (cmap *Map) InitMap(list *MapItem) {
+	cmap.items = make(map[string]*MapItem)
+	if nil != list {
+		cmap.list = list
+	} else {
+		cmap._list.Empty()
+		cmap.list = &cmap._list
+	}
 }
 
 // NewMap creates a new cache map.
@@ -157,13 +172,7 @@ func (cache *Map) Expire(fn func(list, item *MapItem) bool) {
 // parameter. If the list parameter is nil then items are tracked in
 // an internal list.
 func NewMap(list *MapItem) *Map {
-	c := &Map{
-		items: make(map[string]*MapItem),
-		list:  list,
-	}
-	if nil == list {
-		c._list.Empty()
-		c.list = &c._list
-	}
-	return c
+	cmap := &Map{}
+	cmap.InitMap(list)
+	return cmap
 }
